@@ -166,9 +166,12 @@ Implementado (commit `feat: filtros reales, listado/detalle...`):
 
 Notas para el deploy:
 - Las env vars de Supabase **ya están** en `.env.local` (gitignored). `opennextjs-cloudflare build` las toma solas. NO exportar placeholders al hacer el build real.
-- Para "Obra nueva" con datos reales del CRM hace falta un flag/columna (hoy `isNew=false` para items de Supabase; el filtro funciona con el fallback i18n). Si el CRM expone `es_obra_nueva`, agregarlo al SELECT de `lib/properties.ts` y a `mapRow`.
+- ✅ **"Obra nueva" con dato real** (2026-06-11): columna `es_obra_nueva` (boolean,
+  default false) en `propiedades`; checkbox en el form del CRM; `lib/properties.ts`
+  la lee en el SELECT y la mapea a `isNew` → el filtro "Obra nueva" funciona con
+  propiedades reales del CRM.
 
 Pendiente real tras esta tanda:
-- [ ] Rebuild + redeploy del worker con las env vars reales (ya disponibles).
-- [ ] Push de los commits a GitHub (requiere token).
-- [ ] (Opcional) Columna obra nueva / inversión en el CRM para enriquecer filtros.
+- [x] Rebuild + redeploy → automatizado vía GitHub Actions (CI/CD a Cloudflare en cada push).
+- [x] Push de los commits a GitHub.
+- [ ] (Opcional) Registrar dominios secundarios (mvdprime.com.uy) — requiere compra en un registrador.
