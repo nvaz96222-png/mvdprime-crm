@@ -16,6 +16,7 @@ const inputClass =
   "w-full rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-900 outline-none focus:border-accent focus:ring-2 focus:ring-accent/20";
 
 const booleanos = [
+  ["es_obra_nueva", "Obra nueva"],
   ["acepta_mascotas", "Acepta mascotas"],
   ["amueblado", "Amueblado"],
   ["parking", "Parking"],
@@ -61,6 +62,7 @@ export default function PropiedadForm({
     superficie_total: propiedad?.superficie_total ?? "",
     superficie_cubierta: propiedad?.superficie_cubierta ?? "",
     ano_construccion: propiedad?.ano_construccion ?? "",
+    es_obra_nueva: propiedad?.es_obra_nueva || false,
     acepta_mascotas: propiedad?.acepta_mascotas || false,
     amueblado: propiedad?.amueblado || false,
     parking: propiedad?.parking || false,
@@ -152,6 +154,7 @@ export default function PropiedadForm({
         superficie_total: toNum(form.superficie_total),
         superficie_cubierta: toNum(form.superficie_cubierta),
         ano_construccion: toNum(form.ano_construccion),
+        es_obra_nueva: form.es_obra_nueva,
         acepta_mascotas: form.acepta_mascotas,
         amueblado: form.amueblado,
         parking: form.parking,
