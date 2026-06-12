@@ -5,10 +5,13 @@ import PropiedadForm from "@/components/propiedades/PropiedadForm";
 
 export const dynamic = "force-dynamic";
 
-export default async function NuevaPropiedadPage() {
+export default async function NuevaPropiedadPage({ searchParams }) {
   const supabase = createClient();
   const { propietarios, agentes, agenteDefault } =
     await loadOpcionesPropiedad(supabase);
+
+  // Permite pre-seleccionar propietario desde /propietarios/[id]
+  const propietarioDefault = searchParams.propietario_id || null;
 
   return (
     <div className="mx-auto max-w-4xl">
@@ -23,6 +26,7 @@ export default async function NuevaPropiedadPage() {
         propietarios={propietarios}
         agentes={agentes}
         agenteDefault={agenteDefault}
+        propietarioDefault={propietarioDefault}
       />
     </div>
   );

@@ -39,6 +39,7 @@ export default function PropiedadForm({
   agentes = [],
   fotosExistentes = [],
   agenteDefault = null,
+  propietarioDefault = null,
 }) {
   const router = useRouter();
   const supabase = createClient();
@@ -52,7 +53,7 @@ export default function PropiedadForm({
     precio: propiedad?.precio ?? "",
     moneda: propiedad?.moneda || "USD",
     descripcion: propiedad?.descripcion || "",
-    propietario_id: propiedad?.propietario_id || "",
+    propietario_id: propiedad?.propietario_id || propietarioDefault || "",
     agente_id: propiedad?.agente_id || agenteDefault || "",
     direccion: propiedad?.direccion || "",
     barrio: propiedad?.barrio || "",
