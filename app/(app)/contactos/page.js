@@ -71,7 +71,14 @@ export default async function ContactosPage({ searchParams }) {
                       {(c.nombre || "?").charAt(0).toUpperCase()}
                     </span>
                     <div className="min-w-0 flex-1">
-                      <p className="truncate font-medium text-slate-800">{c.nombre}</p>
+                      <div className="flex items-center gap-2">
+                        <p className="truncate font-medium text-slate-800">{c.nombre}</p>
+                        {c.es_propietario && (
+                          <span className="hidden shrink-0 rounded-full bg-navy px-2 py-0.5 text-[10px] font-semibold text-white sm:inline">
+                            Propietario
+                          </span>
+                        )}
+                      </div>
                       <p className="truncate text-sm text-slate-500">
                         {[c.telefono, c.email].filter(Boolean).join(" · ") || "Sin datos de contacto"}
                       </p>

@@ -29,6 +29,7 @@ export default function ContactoForm({ contacto = null }) {
     presupuesto_max: contacto?.presupuesto_max ?? "",
     barrios_interes: (contacto?.barrios_interes || []).join(", "),
     notas: contacto?.notas || "",
+    es_propietario: contacto?.es_propietario ?? false,
   });
 
   const [guardando, setGuardando] = useState(false);
@@ -62,6 +63,7 @@ export default function ContactoForm({ contacto = null }) {
       presupuesto_max: toNum(form.presupuesto_max),
       barrios_interes: barrios.length ? barrios : null,
       notas: form.notas.trim() || null,
+      es_propietario: form.es_propietario,
     };
 
     try {
@@ -160,6 +162,34 @@ export default function ContactoForm({ contacto = null }) {
               onChange={(e) => set("presupuesto_max", e.target.value)}
             />
           </Campo>
+          {/* Toggle Propietario */}
+          <div className="sm:col-span-2">
+            <p className="mb-2 text-sm font-medium text-slate-700">Etiqueta</p>
+            <button
+              type="button"
+              onClick={() => set("es_propietario", !form.es_propietario)}
+              className={`inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-sm font-semibold transition ${
+                form.es_propietario
+                  ? "border-navy bg-navy text-white"
+                  : "border-slate-300 bg-white text-slate-500 hover:border-navy hover:text-navy"
+              }`}
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                <polyline points="9 22 9 12 15 12 15 22" />
+              </svg>
+              Propietario
+              {form.es_propietario && (
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
+                  <polyline points="20 6 9 17 4 12" />
+                </svg>
+              )}
+            </button>
+            <p className="mt-1.5 text-xs text-slate-400">
+              Marcalo si este contacto quiere vender o alquilar una propiedad propia.
+            </p>
+          </div>
+
           <Campo label="Barrios de interés (separados por coma)" full>
             <input
               className={inputClass}

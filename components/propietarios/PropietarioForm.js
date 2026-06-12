@@ -4,13 +4,13 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 
-export default function PropietarioForm({ propietario = null }) {
+export default function PropietarioForm({ propietario = null, contactoId = null, nombreDefault = "" }) {
   const router = useRouter();
   const supabase = createClient();
   const esEdicion = !!propietario;
 
   const [form, setForm] = useState({
-    nombre: propietario?.nombre || "",
+    nombre: propietario?.nombre || nombreDefault || "",
     telefono: propietario?.telefono || "",
     email: propietario?.email || "",
     documento: propietario?.documento || "",
@@ -40,6 +40,7 @@ export default function PropietarioForm({ propietario = null }) {
       documento: form.documento.trim() || null,
       notas: form.notas.trim() || null,
       es_propio: form.es_propio,
+      ...(contactoId && !esEdicion ? { contacto_id: contactoId } : {}),
     };
 
     let resultado;
@@ -58,7 +59,12 @@ export default function PropietarioForm({ propietario = null }) {
       return;
     }
 
-    router.push("/propietarios");
+    // Si vino desde un contacto, volver a su perfil.
+    if (contactoId) {
+      router.push(`/contactos/${contactoId}`);
+    } else {
+      router.push("/propietarios");
+    }
     router.refresh();
   }
 
