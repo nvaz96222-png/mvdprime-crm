@@ -17,6 +17,12 @@ export default async function AppLayout({ children }) {
 
   const perfil = await getPerfil(supabase, user);
 
+  // Usuario desactivado por el admin → forzar logout.
+  if (perfil && perfil.activo === false) {
+    await supabase.auth.signOut();
+    redirect("/login?error=cuenta_desactivada");
+  }
+
   // Datos a mostrar en el sidebar (con fallback al email si el perfil no carga).
   const usuario = {
     email: user.email,
