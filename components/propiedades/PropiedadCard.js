@@ -128,6 +128,22 @@ export default function PropiedadCard({ propiedad }) {
           {guardando && <span className="text-xs text-slate-400">…</span>}
           {error && <span className="text-xs text-red-500">{error}</span>}
         </div>
+
+        {/* Acciones */}
+        <div className="mt-3 flex items-center gap-2 border-t border-slate-100 pt-3">
+          <Link
+            href={`/propiedades/${propiedad.id}/editar`}
+            className="flex-1 rounded-md border border-slate-200 py-1.5 text-center text-xs font-medium text-slate-600 hover:border-navy hover:text-navy"
+          >
+            Editar
+          </Link>
+          <Link
+            href={`/propiedades/${propiedad.id}/analisis`}
+            className="flex-1 rounded-md border border-accent/30 bg-accent/5 py-1.5 text-center text-xs font-medium text-accent hover:bg-accent/10"
+          >
+            Análisis
+          </Link>
+        </div>
       </div>
     </div>
   );
