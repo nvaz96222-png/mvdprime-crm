@@ -4,6 +4,8 @@ import { createClient } from "@/lib/supabase/server";
 import { getPerfil } from "@/lib/supabase/getPerfil";
 import LeadControles from "@/components/leads/LeadControles";
 import InteraccionesPanel from "@/components/leads/InteraccionesPanel";
+import TareasPanel from "@/components/leads/TareasPanel";
+import BtnWhatsApp from "@/components/ui/BtnWhatsApp";
 import {
   LEAD_ETAPA_MAP,
   ORIGENES,
@@ -38,13 +40,20 @@ export default async function LeadDetallePage({ params }) {
   }
   if (!lead) notFound();
 
-  const [{ data: interacciones }, { data: agentes }, perfil] = await Promise.all([
+  const [{ data: interacciones }, { data: agentes }, { data: tareas }, perfil] = await Promise.all([
     supabase
       .from("interacciones")
       .select("*, usuario:usuarios(id,nombre)")
       .eq("lead_id", params.id)
       .order("fecha", { ascending: false }),
     supabase.from("usuarios").select("id, nombre").eq("activo", true).order("nombre"),
+    supabase
+      .from("tareas")
+      .select("*, responsable:usuarios(id,nombre)")
+      .eq("lead_id", params.id)
+      .order("completada", { ascending: true })
+      .order("vencimiento", { ascending: true, nullsFirst: false })
+      .order("created_at", { ascending: true }),
     supabase.auth.getUser().then(({ data: { user } }) => getPerfil(supabase, user)),
   ]);
 
@@ -92,7 +101,17 @@ export default async function LeadDetallePage({ params }) {
               Contacto
             </h2>
             <dl className="grid grid-cols-2 gap-4 text-sm">
-              <Dato label="Teléfono" valor={c?.telefono} />
+              <Dato
+                label="Teléfono"
+                valor={
+                  c?.telefono ? (
+                    <span className="flex items-center gap-2">
+                      {c.telefono}
+                      <BtnWhatsApp telefono={c.telefono} />
+                    </span>
+                  ) : null
+                }
+              />
               <Dato label="Email" valor={c?.email} />
               <Dato label="Interés" valor={INTERES_MAP[c?.interes] || c?.interes} />
               <Dato
@@ -158,14 +177,21 @@ export default async function LeadDetallePage({ params }) {
           />
         </div>
 
-        {/* Columna lateral: controles */}
-        <div className="lg:col-span-1">
+        {/* Columna lateral */}
+        <div className="space-y-6 lg:col-span-1">
           <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
             <h2 className="mb-4 text-sm font-semibold uppercase tracking-wide text-slate-400">
               Gestión
             </h2>
             <LeadControles lead={lead} agentes={agentes || []} />
           </div>
+
+          <TareasPanel
+            leadId={lead.id}
+            tareas={tareas || []}
+            agentes={agentes || []}
+            usuarioId={perfil?.id || null}
+          />
         </div>
       </div>
     </div>

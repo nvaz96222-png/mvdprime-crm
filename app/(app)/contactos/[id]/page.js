@@ -19,6 +19,7 @@ const ESTADO_COLORS = {
 const ESTADO_MAP = Object.fromEntries(ESTADOS.map((e) => [e.value, e.label]));
 const OP_MAP = Object.fromEntries(OPERACIONES.map((o) => [o.value, o.label]));
 import { formatPrecio, formatFecha } from "@/lib/format";
+import BtnWhatsApp from "@/components/ui/BtnWhatsApp";
 
 export const dynamic = "force-dynamic";
 
@@ -99,7 +100,17 @@ export default async function ContactoPerfilPage({ params }) {
               Información
             </h2>
             <dl className="space-y-3 text-sm">
-              <Dato label="Teléfono" valor={contacto.telefono} />
+              <Dato
+                label="Teléfono"
+                valor={
+                  contacto.telefono ? (
+                    <span className="flex items-center gap-2">
+                      {contacto.telefono}
+                      <BtnWhatsApp telefono={contacto.telefono} />
+                    </span>
+                  ) : null
+                }
+              />
               <Dato label="Email" valor={contacto.email} />
               <Dato label="Fuente" valor={FUENTE_MAP[contacto.fuente] || contacto.fuente} />
               <Dato label="Interés" valor={INTERES_MAP[contacto.interes] || contacto.interes} />

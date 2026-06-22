@@ -4,6 +4,7 @@ import { useState, useMemo } from "react";
 import dynamic from "next/dynamic";
 import TablaComparables from "./TablaComparables";
 import EstadisticasComparables from "./EstadisticasComparables";
+import AnalisisIA from "./AnalisisIA";
 import { formatPrecio } from "@/lib/format";
 import { TIPO_MAP, OPERACION_MAP } from "@/lib/constants";
 
@@ -13,6 +14,7 @@ const TABS = [
   { id: "mapa", label: "Mapa" },
   { id: "tabla", label: "Tabla" },
   { id: "estadisticas", label: "Estadísticas" },
+  { id: "ia", label: "Análisis IA" },
 ];
 
 export default function AnalisisMarket({ propiedad, comparables }) {
@@ -95,6 +97,9 @@ export default function AnalisisMarket({ propiedad, comparables }) {
               propiedad={propiedad}
               comparables={comparables}
             />
+          )}
+          {tab === "ia" && (
+            <AnalisisIA propiedad={propiedad} comparables={comparables} />
           )}
         </>
       )}

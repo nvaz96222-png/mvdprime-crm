@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { LEAD_PRIORIDADES, ORIGENES } from "@/lib/constants";
 import { formatFecha } from "@/lib/format";
+import BtnWhatsApp from "@/components/ui/BtnWhatsApp";
 
 const ORIGEN_MAP = Object.fromEntries(ORIGENES.map((o) => [o.value, o.label]));
 const PRIORIDAD_MAP = Object.fromEntries(
@@ -49,14 +50,23 @@ export default function LeadCard({ lead, onDragStart }) {
         <span>{formatFecha(lead.created_at)}</span>
       </div>
 
-      {lead.agente?.nombre && (
-        <div className="mt-2 flex items-center gap-1.5 border-t border-slate-100 pt-2">
-          <span className="flex h-5 w-5 items-center justify-center rounded-full bg-navy text-[10px] font-semibold text-white">
-            {lead.agente.nombre.charAt(0).toUpperCase()}
-          </span>
-          <span className="truncate text-xs text-slate-500">
-            {lead.agente.nombre}
-          </span>
+      {(lead.agente?.nombre || lead.contacto?.telefono) && (
+        <div className="mt-2 flex items-center justify-between border-t border-slate-100 pt-2">
+          {lead.agente?.nombre ? (
+            <div className="flex items-center gap-1.5">
+              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-navy text-[10px] font-semibold text-white">
+                {lead.agente.nombre.charAt(0).toUpperCase()}
+              </span>
+              <span className="truncate text-xs text-slate-500">
+                {lead.agente.nombre}
+              </span>
+            </div>
+          ) : (
+            <span />
+          )}
+          {lead.contacto?.telefono && (
+            <BtnWhatsApp telefono={lead.contacto.telefono} variant="icon" />
+          )}
         </div>
       )}
     </div>
