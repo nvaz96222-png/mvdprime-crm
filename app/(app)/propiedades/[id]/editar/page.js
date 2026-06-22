@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { loadOpcionesPropiedad } from "@/lib/data/propiedades";
 import PropiedadForm from "@/components/propiedades/PropiedadForm";
+import BtnCopiarFicha from "@/components/public/BtnCopiarFicha";
 
 export const dynamic = "force-dynamic";
 
@@ -37,13 +38,33 @@ export default async function EditarPropiedadPage({ params }) {
 
   const { propietarios, agentes } = await loadOpcionesPropiedad(supabase);
 
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://mvdprime.vercel.app";
+  const fichaUrl = `${baseUrl}/p/${params.id}`;
+
   return (
     <div className="mx-auto max-w-4xl">
       <div className="mb-6">
         <Link href="/propiedades" className="text-sm text-slate-500 hover:text-accent">
           ← Volver a propiedades
         </Link>
-        <h1 className="mt-1 text-2xl font-bold text-navy">Editar propiedad</h1>
+        <div className="mt-1 flex flex-wrap items-center gap-3">
+          <h1 className="text-2xl font-bold text-navy">Editar propiedad</h1>
+          <div className="ml-auto flex items-center gap-2">
+            <Link
+              href={`/p/${params.id}`}
+              target="_blank"
+              className="inline-flex items-center gap-1.5 rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-sm font-medium text-slate-600 hover:border-navy hover:text-navy"
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                <polyline points="15 3 21 3 21 9" />
+                <line x1="10" y1="14" x2="21" y2="3" />
+              </svg>
+              Ver ficha pública
+            </Link>
+            <BtnCopiarFicha url={fichaUrl} />
+          </div>
+        </div>
         <p className="mt-0.5 text-sm text-slate-500">{propiedad.titulo}</p>
       </div>
 
