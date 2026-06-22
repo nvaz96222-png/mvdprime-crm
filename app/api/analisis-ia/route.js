@@ -14,7 +14,7 @@ export async function POST(request) {
     const prompt = buildPrompt(propiedad, stats, moneda);
 
     const message = await client.messages.create({
-      model: "claude-haiku-4-5",
+      model: "claude-haiku-4-5-20251001",
       max_tokens: 1024,
       messages: [{ role: "user", content: prompt }],
     });
@@ -31,7 +31,16 @@ export async function POST(request) {
         { status: 500 }
       );
     }
-    return NextResponse.json({ error: "Error al generar el análisis." }, { status: 500 });
+    if (err?.status === 404) {
+      return NextResponse.json(
+        { error: `Modelo no encontrado: ${err.message}` },
+        { status: 500 }
+      );
+    }
+    return NextResponse.json(
+      { error: err?.message || "Error al generar el análisis." },
+      { status: 500 }
+    );
   }
 }
 
