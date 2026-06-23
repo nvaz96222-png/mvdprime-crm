@@ -12,7 +12,7 @@ export async function GET(request, { params }) {
 
     const { data: propiedad, error } = await supabase
       .from("propiedades")
-      .select("*, fotos(url, es_principal, orden)")
+      .select("*, fotos(url, es_principal, orden), agente:agente_id(id, nombre)")
       .eq("id", params.id)
       .single();
 
@@ -41,8 +41,10 @@ export async function GET(request, { params }) {
       }
     }
 
+    const agente = propiedad.agente || null;
+
     const buffer = await renderToBuffer(
-      React.createElement(PlanComercializacion, { propiedad, fotoBase64 })
+      React.createElement(PlanComercializacion, { propiedad, fotoBase64, agente })
     );
 
     const slug = (propiedad.titulo || "propiedad")
