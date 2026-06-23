@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import BuscadorGlobal from "./BuscadorGlobal";
 
 const NAV_TODOS = [
   { href: "/dashboard", label: "Dashboard", icon: IconDashboard },
@@ -78,8 +79,13 @@ export default function Sidebar({ usuario }) {
           <p className="mt-0.5 text-xs text-slate-400">Real Estate CRM</p>
         </div>
 
+        {/* Buscador */}
+        <div className="px-3 pb-2 pt-3">
+          <BuscadorGlobal />
+        </div>
+
         {/* Navegación */}
-        <nav className="flex-1 px-3 py-4">
+        <nav className="flex-1 px-3 py-2">
           <div className="space-y-1">
             {NAV_TODOS.map((item) => <NavLink key={item.href} item={item} pathname={pathname} onClick={() => setAbierto(false)} />)}
           </div>
