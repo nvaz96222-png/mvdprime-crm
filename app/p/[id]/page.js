@@ -210,33 +210,39 @@ export default async function FichaPublicaPage({ params }) {
 
           {/* Sidebar: CTA contacto */}
           <div className="lg:col-span-1">
-            <div className="sticky top-20 rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
-              <p className="text-sm font-semibold text-navy">¿Te interesa esta propiedad?</p>
-              <p className="mt-1 text-sm text-slate-500">
-                Contactanos y te respondemos a la brevedad.
-              </p>
+            <div className="sticky top-20 space-y-4">
+              {/* WhatsApp rápido */}
+              <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+                <a
+                  href={whatsappUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex w-full items-center justify-center gap-2 rounded-xl bg-green-500 py-3 text-sm font-semibold text-white transition hover:bg-green-600"
+                >
+                  <IconWhatsApp />
+                  Consultar por WhatsApp
+                </a>
 
-              <a
-                href={whatsappUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl bg-green-500 py-3 text-sm font-semibold text-white transition hover:bg-green-600"
-              >
-                <IconWhatsApp />
-                Consultar por WhatsApp
-              </a>
+                {propiedad.agente?.nombre && (
+                  <div className="mt-4 border-t border-slate-100 pt-4">
+                    <p className="text-xs text-slate-400">Agente responsable</p>
+                    <p className="mt-0.5 text-sm font-medium text-slate-700">
+                      {propiedad.agente.nombre}
+                    </p>
+                  </div>
+                )}
 
-              {propiedad.agente?.nombre && (
-                <div className="mt-4 border-t border-slate-100 pt-4">
-                  <p className="text-xs text-slate-400">Agente responsable</p>
-                  <p className="mt-0.5 text-sm font-medium text-slate-700">
-                    {propiedad.agente.nombre}
-                  </p>
+                <div className="mt-4 border-t border-slate-100 pt-4 text-center">
+                  <BtnCompartir titulo={propiedad.titulo} />
                 </div>
-              )}
+              </div>
 
-              <div className="mt-4 border-t border-slate-100 pt-4 text-center">
-                <BtnCompartir titulo={propiedad.titulo} />
+              {/* Formulario de contacto → lead automático */}
+              <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+                <FormContacto
+                  propiedadId={propiedad.id}
+                  propiedadTitulo={propiedad.titulo}
+                />
               </div>
             </div>
           </div>
@@ -270,6 +276,7 @@ function MetricCard({ icon, value, label }) {
 
 // Botón client que copia la URL
 import BtnCompartir from "@/components/public/BtnCompartir";
+import FormContacto from "@/components/public/FormContacto";
 
 function IconWhatsApp() {
   return (
