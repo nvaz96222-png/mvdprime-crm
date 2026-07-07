@@ -11,7 +11,7 @@ const geistSans = localFont({
 export const metadata = {
   title: "MVD Prime Real Estate CRM",
   description: "CRM inmobiliario de MVD Prime Real Estate",
-  manifest: "/manifest.json",
+  manifest: "/manifest.webmanifest",
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
