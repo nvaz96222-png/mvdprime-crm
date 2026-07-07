@@ -1,22 +1,23 @@
 "use client";
+
 import { useState } from "react";
 
-export default function FormContacto({ propiedadId, propiedadTitulo }) {
+export default function FormContactoProyecto({ proyectoId, proyectoNombre }) {
   const [form, setForm] = useState({
     nombre: "",
     telefono: "",
     email: "",
-    mensaje: `Hola, me interesa la propiedad "${propiedadTitulo}". ¿Pueden contactarme?`,
+    mensaje: `Hola, me interesa el desarrollo "${proyectoNombre}". ¿Pueden contactarme?`,
+    _hp: "",
   });
-  const [estado, setEstado] = useState("idle"); // idle | loading | ok | error
+  const [estado, setEstado] = useState("idle");
   const [errorMsg, setErrorMsg] = useState("");
-  const [hp, setHp] = useState(""); // honeypot anti-spam
 
   function set(k, v) {
     setForm((f) => ({ ...f, [k]: v }));
   }
 
-  // UTM de la URL + referrer — trazabilidad de campañas (Meta/Google Ads).
+  // UTM de la URL + referrer — trazabilidad de campañas.
   function capturarUtm() {
     try {
       const p = new URLSearchParams(window.location.search);
@@ -38,7 +39,7 @@ export default function FormContacto({ propiedadId, propiedadTitulo }) {
     if (!form.nombre.trim() || !form.telefono.trim()) return;
     setEstado("loading");
     try {
-      const res = await fetch("/api/contacto-web", {
+      const res = await fetch("/api/contacto-proyecto", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -46,10 +47,10 @@ export default function FormContacto({ propiedadId, propiedadTitulo }) {
           telefono: form.telefono.trim(),
           email: form.email.trim() || null,
           mensaje: form.mensaje.trim(),
-          propiedad_id: propiedadId,
-          propiedad_titulo: propiedadTitulo,
+          proyecto_id: proyectoId,
+          proyecto_nombre: proyectoNombre,
           utm: capturarUtm(),
-          _hp: hp,
+          _hp: form._hp,
         }),
       });
       const data = await res.json();
@@ -71,7 +72,7 @@ export default function FormContacto({ propiedadId, propiedadTitulo }) {
         </div>
         <p className="font-semibold text-green-800">¡Consulta enviada!</p>
         <p className="mt-1 text-sm text-green-700">
-          Te contactaremos a la brevedad. También podés escribirnos por WhatsApp.
+          Te contactamos a la brevedad. También podés escribirnos por WhatsApp.
         </p>
       </div>
     );
@@ -79,19 +80,18 @@ export default function FormContacto({ propiedadId, propiedadTitulo }) {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-3">
-      <p className="text-sm font-semibold text-navy">Solicitar información</p>
-      <p className="text-xs text-slate-500">Te contactamos sin compromiso.</p>
-
-      {/* Honeypot: invisible para humanos, los bots lo llenan */}
+      {/* Honeypot anti-spam — oculto para humanos, los bots lo rellenan */}
       <input
         type="text"
-        value={hp}
-        onChange={(e) => setHp(e.target.value)}
+        name="_hp"
+        value={form._hp}
+        onChange={(e) => set("_hp", e.target.value)}
         tabIndex={-1}
-        autoComplete="off"
         aria-hidden="true"
-        style={{ position: "absolute", left: "-9999px", height: 0, width: 0, opacity: 0 }}
+        style={{ position: "absolute", left: "-9999px", opacity: 0, pointerEvents: "none" }}
       />
+      <p className="text-sm font-semibold text-navy">Solicitar información</p>
+      <p className="text-xs text-slate-500">Te contactamos sin compromiso.</p>
 
       <div>
         <label className="mb-1 block text-xs font-medium text-slate-600">

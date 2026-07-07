@@ -2,16 +2,16 @@ import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { ingestarLead, contextoDeRequest } from "@/lib/leads/ingesta";
 
-// POST /api/contacto-web — formulario de la ficha pública de propiedad.
+// POST /api/contacto-proyecto — formulario público de desarrollos.
 // Ruta pública (ver APIS_PUBLICAS en lib/supabase/middleware.js).
 export async function POST(request) {
   try {
     const {
       nombre, telefono, email, mensaje,
-      propiedad_id, propiedad_titulo, utm, _hp,
+      proyecto_id, proyecto_nombre, utm, _hp,
     } = await request.json();
 
-    // Anti-spam honeypot: los bots llenan el campo oculto.
+    // Anti-spam honeypot
     if (_hp) return NextResponse.json({ ok: true });
 
     if (!nombre?.trim() || !telefono?.trim()) {
@@ -31,30 +31,54 @@ export async function POST(request) {
 
     const supabase = createAdminClient();
 
+    // Agente y slug del proyecto → asignación automática + analytics.
+    let agente_id = null;
+    let proyecto_slug = proyecto_nombre || "";
+    if (proyecto_id) {
+      const { data: proy } = await supabase
+        .from("proyectos")
+        .select("agente_id, slug")
+        .eq("id", proyecto_id)
+        .maybeSingle();
+      agente_id = proy?.agente_id || null;
+      proyecto_slug = proy?.slug || proyecto_slug;
+    }
+
     const resultado = await ingestarLead(supabase, {
-      canal: "contacto-web",
+      canal: "contacto-proyecto",
       nombre,
       telefono,
       email,
       mensaje: [
         mensaje?.trim(),
-        propiedad_titulo ? `Propiedad de interés: ${propiedad_titulo}` : null,
+        proyecto_nombre ? `Desarrollo de interés: ${proyecto_nombre}` : null,
       ].filter(Boolean).join("\n"),
       origen: "web",
-      propiedad_id,
+      proyecto_id,
+      agente_id,
       utm,
       contexto: contextoDeRequest(request),
-      notasContacto: `Registrado desde ficha web${propiedad_titulo ? `: ${propiedad_titulo}` : ""}`,
+      notasContacto: `Registrado desde desarrollo web${proyecto_nombre ? `: ${proyecto_nombre}` : ""}`,
     });
 
     if (!resultado.ok) {
-      console.error("[contacto-web] ingesta falló:", resultado.paso, resultado.error);
+      console.error("[contacto-proyecto] ingesta falló:", resultado.paso, resultado.error);
       return NextResponse.json({ error: "Error interno" }, { status: 500 });
+    }
+
+    // Analytics del proyecto — no bloqueante.
+    if (proyecto_id) {
+      supabase
+        .from("proyecto_eventos")
+        .insert({ proyecto_id, slug: proyecto_slug, tipo: "form_enviado" })
+        .then(({ error }) => {
+          if (error) console.error("[contacto-proyecto] evento:", error.message);
+        });
     }
 
     return NextResponse.json({ ok: true });
   } catch (err) {
-    console.error("[contacto-web]", err);
+    console.error("[contacto-proyecto]", err);
     return NextResponse.json({ error: "Error interno" }, { status: 500 });
   }
 }
