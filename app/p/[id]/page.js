@@ -8,11 +8,21 @@ export const dynamic = "force-dynamic";
 
 export async function generateMetadata({ params }) {
   const supabase = createAdminClient();
-  const { data } = await supabase
-    .from("propiedades")
-    .select("titulo, barrio, departamento, precio, moneda, tipo, operacion")
-    .eq("id", params.id)
-    .maybeSingle();
+  const [{ data }, { data: fotoPrincipal }] = await Promise.all([
+    supabase
+      .from("propiedades")
+      .select("titulo, barrio, departamento, precio, moneda, tipo, operacion")
+      .eq("id", params.id)
+      .maybeSingle(),
+    supabase
+      .from("fotos")
+      .select("url, es_principal")
+      .eq("propiedad_id", params.id)
+      .order("es_principal", { ascending: false })
+      .order("orden")
+      .limit(1)
+      .maybeSingle(),
+  ]);
 
   if (!data) return { title: "Propiedad | MVDPrime" };
 
@@ -23,6 +33,7 @@ export async function generateMetadata({ params }) {
     openGraph: {
       title: `${data.titulo} | MVDPrime`,
       description: `${TIPO_MAP[data.tipo] || data.tipo} en ${OPERACION_MAP[data.operacion] || data.operacion} · ${ubicacion}`,
+      images: fotoPrincipal?.url ? [{ url: fotoPrincipal.url }] : undefined,
     },
   };
 }
