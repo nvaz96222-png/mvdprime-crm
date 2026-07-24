@@ -4,6 +4,9 @@ import { createClient } from "@/lib/supabase/server";
 import { loadOpcionesPropiedad } from "@/lib/data/propiedades";
 import PropiedadForm from "@/components/propiedades/PropiedadForm";
 import BtnCopiarFicha from "@/components/public/BtnCopiarFicha";
+import BtnPublicarML from "@/components/propiedades/BtnPublicarML";
+import { createAdminClient } from "@/lib/supabase/admin";
+import { estaConectado } from "@/lib/mercadolibre";
 
 export const dynamic = "force-dynamic";
 
@@ -41,6 +44,14 @@ export default async function EditarPropiedadPage({ params }) {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://mvdprime.vercel.app";
   const fichaUrl = `${baseUrl}/p/${params.id}`;
 
+  // Estado de la conexión con Mercado Libre (token compartido en Supabase).
+  let mlConectado = null;
+  try {
+    mlConectado = await estaConectado(createAdminClient());
+  } catch {
+    // Sin service_role o sin tabla: el botón mostrará "Conectar".
+  }
+
   return (
     <div className="mx-auto max-w-4xl">
       <div className="mb-6">
@@ -75,6 +86,18 @@ export default async function EditarPropiedadPage({ params }) {
               Análisis de mercado
             </Link>
             <Link
+              href={`/tasaciones/nuevo?propiedad_id=${params.id}`}
+              className="inline-flex items-center gap-1.5 rounded-lg border border-accent/40 bg-accent/5 px-3 py-1.5 text-sm font-medium text-accent hover:bg-accent/10"
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <rect x="4" y="2" width="16" height="20" rx="2" />
+                <line x1="8" y1="6" x2="16" y2="6" />
+                <path d="M15 13l2 2 4-4" />
+                <line x1="8" y1="18" x2="12" y2="18" />
+              </svg>
+              Tasar
+            </Link>
+            <Link
               href={`/p/${params.id}`}
               target="_blank"
               className="inline-flex items-center gap-1.5 rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-sm font-medium text-slate-600 hover:border-navy hover:text-navy"
@@ -90,6 +113,17 @@ export default async function EditarPropiedadPage({ params }) {
           </div>
         </div>
         <p className="mt-0.5 text-sm text-slate-500">{propiedad.titulo}</p>
+
+        <div className="mt-3 border-t border-slate-100 pt-3">
+          <BtnPublicarML
+            propiedadId={params.id}
+            conectado={!!mlConectado}
+            mlItemId={propiedad.ml_item_id}
+            mlEstado={propiedad.ml_estado}
+            mlPermalink={propiedad.ml_permalink}
+            mlError={propiedad.ml_error}
+          />
+        </div>
       </div>
 
       <PropiedadForm
