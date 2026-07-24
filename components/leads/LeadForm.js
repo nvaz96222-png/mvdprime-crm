@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import {
@@ -8,6 +8,7 @@ import {
   LEAD_PRIORIDADES,
   ORIGENES,
   CONTACTO_INTERESES,
+  PROYECTO_TIPO_MAP,
 } from "@/lib/constants";
 
 const inputClass =
@@ -17,7 +18,9 @@ export default function LeadForm({
   contactos = [],
   propiedades = [],
   agentes = [],
+  proyectos = [],
   agenteDefault = null,
+  proyectoIdDefault = null,
 }) {
   const router = useRouter();
   const supabase = createClient();
@@ -41,6 +44,8 @@ export default function LeadForm({
   // Lead
   const [lead, setLead] = useState({
     propiedad_id: "",
+    proyecto_id: proyectoIdDefault || "",
+    tipologia_id: "",
     agente_id: agenteDefault || "",
     etapa: "nuevo",
     origen: "directo",
@@ -49,6 +54,8 @@ export default function LeadForm({
     notas: "",
   });
 
+  const [tipologias, setTipologias] = useState([]);
+  const [cargandoTipologias, setCargandoTipologias] = useState(false);
   const [guardando, setGuardando] = useState(false);
   const [error, setError] = useState("");
 
@@ -59,11 +66,30 @@ export default function LeadForm({
     setLead((l) => ({ ...l, [campo]: valor }));
   }
 
+  // Cargar tipologías cuando cambia el proyecto
+  useEffect(() => {
+    if (!lead.proyecto_id) {
+      setTipologias([]);
+      setL("tipologia_id", "");
+      return;
+    }
+    setCargandoTipologias(true);
+    supabase
+      .from("proyecto_tipologias")
+      .select("id, nombre, dormitorios, superficie_desde")
+      .eq("proyecto_id", lead.proyecto_id)
+      .order("orden")
+      .then(({ data }) => {
+        setTipologias(data || []);
+        setL("tipologia_id", "");
+        setCargandoTipologias(false);
+      });
+  }, [lead.proyecto_id]);
+
   async function handleSubmit(e) {
     e.preventDefault();
     setError("");
 
-    // Validación de contacto.
     if (modoContacto === "existente" && !contactoId) {
       setError("Seleccioná un contacto.");
       return;
@@ -75,7 +101,7 @@ export default function LeadForm({
 
     setGuardando(true);
     try {
-      // 1) Resolver contacto.
+      // 1) Resolver contacto
       let cid = contactoId;
       if (modoContacto === "nuevo") {
         const { data, error } = await supabase
@@ -93,12 +119,14 @@ export default function LeadForm({
         cid = data.id;
       }
 
-      // 2) Crear lead.
+      // 2) Crear lead
       const { data: leadCreado, error: leadErr } = await supabase
         .from("leads")
         .insert({
           contacto_id: cid,
           propiedad_id: lead.propiedad_id || null,
+          proyecto_id: lead.proyecto_id || null,
+          tipologia_id: lead.tipologia_id || null,
           agente_id: lead.agente_id || null,
           etapa: lead.etapa,
           origen: lead.origen,
@@ -170,7 +198,7 @@ export default function LeadForm({
             </select>
             {contactos.length === 0 && (
               <p className="mt-1 text-xs text-amber-600">
-                No hay contactos. Cambiá a “Nuevo”.
+                No hay contactos. Cambiá a &quot;Nuevo&quot;.
               </p>
             )}
           </div>
@@ -234,6 +262,44 @@ export default function LeadForm({
           Datos del lead
         </h2>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          {/* Desarrollo asociado */}
+          <Campo label="Desarrollo (proyecto)">
+            <select
+              className={inputClass}
+              value={lead.proyecto_id}
+              onChange={(e) => setL("proyecto_id", e.target.value)}
+            >
+              <option value="">— Sin desarrollo —</option>
+              {proyectos.map((p) => (
+                <option key={p.id} value={p.id}>
+                  {p.nombre}
+                  {p.tipo ? ` · ${PROYECTO_TIPO_MAP[p.tipo] || p.tipo}` : ""}
+                </option>
+              ))}
+            </select>
+          </Campo>
+
+          {/* Tipología — solo aparece si hay proyecto seleccionado */}
+          {lead.proyecto_id && (
+            <Campo label="Tipología de interés">
+              <select
+                className={inputClass}
+                value={lead.tipologia_id}
+                onChange={(e) => setL("tipologia_id", e.target.value)}
+                disabled={cargandoTipologias}
+              >
+                <option value="">— Sin especificar —</option>
+                {tipologias.map((t) => (
+                  <option key={t.id} value={t.id}>
+                    {t.nombre}
+                    {t.dormitorios ? ` · ${t.dormitorios} dorm.` : ""}
+                    {t.superficie_desde ? ` · ${t.superficie_desde}m²` : ""}
+                  </option>
+                ))}
+              </select>
+            </Campo>
+          )}
+
           <Campo label="Propiedad de interés">
             <select
               className={inputClass}
@@ -248,6 +314,7 @@ export default function LeadForm({
               ))}
             </select>
           </Campo>
+
           <Campo label="Agente asignado">
             <select
               className={inputClass}
@@ -262,6 +329,7 @@ export default function LeadForm({
               ))}
             </select>
           </Campo>
+
           <Campo label="Etapa">
             <select
               className={inputClass}
@@ -275,6 +343,7 @@ export default function LeadForm({
               ))}
             </select>
           </Campo>
+
           <Campo label="Origen">
             <select
               className={inputClass}
@@ -288,6 +357,7 @@ export default function LeadForm({
               ))}
             </select>
           </Campo>
+
           <Campo label="Prioridad">
             <select
               className={inputClass}
@@ -301,6 +371,7 @@ export default function LeadForm({
               ))}
             </select>
           </Campo>
+
           <Campo label="Próximo contacto">
             <input
               type="datetime-local"
@@ -309,6 +380,7 @@ export default function LeadForm({
               onChange={(e) => setL("proximo_contacto", e.target.value)}
             />
           </Campo>
+
           <Campo label="Notas" className="sm:col-span-2">
             <textarea
               className={inputClass}

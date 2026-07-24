@@ -2,11 +2,22 @@
 
 import { useState } from "react";
 
-export default function BtnCompartir({ titulo }) {
+export default function BtnCompartir({ titulo, proyectoId, slug }) {
   const [copiado, setCopiado] = useState(false);
+
+  function trackCompartir() {
+    if (!proyectoId && !slug) return;
+    const payload = JSON.stringify({ proyecto_id: proyectoId, slug: slug || "", tipo: "compartir_click" });
+    if (navigator.sendBeacon) {
+      navigator.sendBeacon("/api/proyecto-evento", new Blob([payload], { type: "application/json" }));
+    } else {
+      fetch("/api/proyecto-evento", { method: "POST", headers: { "Content-Type": "application/json" }, body: payload }).catch(() => {});
+    }
+  }
 
   async function copiar() {
     const url = window.location.href;
+    trackCompartir();
     try {
       await navigator.clipboard.writeText(url);
       setCopiado(true);

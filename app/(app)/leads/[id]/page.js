@@ -10,6 +10,7 @@ import {
   LEAD_ETAPA_MAP,
   ORIGENES,
   CONTACTO_INTERESES,
+  PROYECTO_TIPO_MAP,
 } from "@/lib/constants";
 import { formatPrecio, formatFecha, formatFechaHora } from "@/lib/format";
 
@@ -26,7 +27,7 @@ export default async function LeadDetallePage({ params }) {
   const { data: lead, error } = await supabase
     .from("leads")
     .select(
-      "*, contacto:contactos(*), propiedad:propiedades(id,titulo,barrio,precio,moneda), agente:usuarios(id,nombre)"
+      "*, contacto:contactos(*), propiedad:propiedades(id,titulo,barrio,precio,moneda), agente:usuarios(id,nombre), proyecto:proyectos(id,nombre,tipo), tipologia:proyecto_tipologias(id,nombre,dormitorios,superficie_desde)"
     )
     .eq("id", params.id)
     .maybeSingle();
@@ -146,6 +147,37 @@ export default async function LeadDetallePage({ params }) {
               Datos del lead
             </h2>
             <dl className="grid grid-cols-2 gap-4 text-sm">
+              {/* Desarrollo asociado */}
+              {lead.proyecto && (
+                <Dato
+                  label="Desarrollo"
+                  valor={
+                    <Link
+                      href={`/proyectos/${lead.proyecto.id}/editar?tab=leads`}
+                      className="text-accent hover:underline"
+                    >
+                      {lead.proyecto.nombre}
+                      {lead.proyecto.tipo ? (
+                        <span className="ml-1 text-xs text-slate-400">
+                          ({PROYECTO_TIPO_MAP[lead.proyecto.tipo] || lead.proyecto.tipo})
+                        </span>
+                      ) : null}
+                    </Link>
+                  }
+                />
+              )}
+              {lead.tipologia && (
+                <Dato
+                  label="Tipología"
+                  valor={[
+                    lead.tipologia.nombre,
+                    lead.tipologia.dormitorios ? `${lead.tipologia.dormitorios} dorm.` : null,
+                    lead.tipologia.superficie_desde ? `${lead.tipologia.superficie_desde}m²` : null,
+                  ]
+                    .filter(Boolean)
+                    .join(" · ")}
+                />
+              )}
               <Dato
                 label="Propiedad"
                 valor={

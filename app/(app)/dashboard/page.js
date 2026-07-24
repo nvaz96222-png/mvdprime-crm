@@ -29,11 +29,18 @@ const ETAPAS_ACTIVAS = LEAD_ETAPAS.map((e) => e.value).filter(
 export default async function DashboardPage() {
   const supabase = createClient();
 
+  const hace30dias = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
+
   const [
     { data: propiedades },
     { data: leads },
     { data: interaccionesRecientes },
     { count: contactosCount },
+    { count: proyectosCount },
+    { count: proyectosPublicados },
+    { count: proyectosDestacados },
+    { data: leadsDesarrollosRaw },
+    { data: proyectosNombres },
   ] = await Promise.all([
     supabase.from("propiedades").select("estado"),
     supabase
@@ -49,6 +56,30 @@ export default async function DashboardPage() {
       .order("fecha", { ascending: false })
       .limit(8),
     supabase.from("contactos").select("*", { count: "exact", head: true }),
+    supabase
+      .from("proyectos")
+      .select("*", { count: "exact", head: true })
+      .eq("estado", "en_comercializacion"),
+    supabase
+      .from("proyectos")
+      .select("*", { count: "exact", head: true })
+      .eq("publicar_web", true),
+    supabase
+      .from("proyectos")
+      .select("*", { count: "exact", head: true })
+      .eq("publicar_web", true)
+      .eq("destacado", true),
+    // Leads provenientes de desarrollos (últimos 30 días)
+    supabase
+      .from("leads")
+      .select("proyecto_id")
+      .not("proyecto_id", "is", null)
+      .gte("created_at", hace30dias),
+    // Nombres de proyectos para el ranking
+    supabase
+      .from("proyectos")
+      .select("id, nombre, slug")
+      .eq("publicar_web", true),
   ]);
 
   // --- Métricas de propiedades ---
@@ -72,7 +103,6 @@ export default async function DashboardPage() {
   const leadsNuevosHoy = (leads || []).filter(
     (l) => new Date(l.created_at) >= inicioHoy
   ).length;
-
   const leadsActivos = (leads || []).filter((l) =>
     ETAPAS_ACTIVAS.includes(l.etapa)
   ).length;
@@ -95,13 +125,30 @@ export default async function DashboardPage() {
       dias: Math.floor((Date.now() - l.ultimaActividad) / (24 * 60 * 60 * 1000)),
     }));
 
+  // --- Ranking proyectos por leads (todos los tiempos) ---
+  const proyectoMap = Object.fromEntries(
+    (proyectosNombres || []).map((p) => [p.id, p])
+  );
+  const leadsDesarrollos30 = leadsDesarrollosRaw || [];
+  const rankingMap = {};
+  for (const l of leadsDesarrollos30) {
+    rankingMap[l.proyecto_id] = (rankingMap[l.proyecto_id] || 0) + 1;
+  }
+  const ranking = Object.entries(rankingMap)
+    .map(([id, count]) => ({ ...proyectoMap[id], count }))
+    .filter((p) => p.nombre)
+    .sort((a, b) => b.count - a.count)
+    .slice(0, 5);
+
+  const leadsDesarrollosTotal = leadsDesarrollos30.length;
+
   return (
     <div>
       <h1 className="text-2xl font-bold text-navy">Dashboard</h1>
       <p className="mt-0.5 text-sm text-slate-500">Resumen de la operación</p>
 
-      {/* KPIs */}
-      <div className="mt-6 grid grid-cols-2 gap-4 lg:grid-cols-4">
+      {/* KPIs — Operación */}
+      <div className="mt-6 grid grid-cols-2 gap-4 lg:grid-cols-5">
         <StatCard
           label="Propiedades disponibles"
           valor={disponibles}
@@ -129,6 +176,41 @@ export default async function DashboardPage() {
           sub="en la base"
           color="text-navy"
           href="/contactos"
+        />
+        <StatCard
+          label="Proyectos activos"
+          valor={proyectosCount ?? 0}
+          sub="en comercialización"
+          color="text-accent"
+          href="/proyectos?estado=en_comercializacion"
+        />
+      </div>
+
+      {/* KPIs — Desarrollos */}
+      <p className="mt-6 text-xs font-semibold uppercase tracking-wide text-slate-400">
+        Desarrollos
+      </p>
+      <div className="mt-2 grid grid-cols-2 gap-4 lg:grid-cols-3">
+        <StatCard
+          label="Publicados en web"
+          valor={proyectosPublicados ?? 0}
+          sub="visibles en portal"
+          color="text-accent"
+          href="/proyectos"
+        />
+        <StatCard
+          label="Destacados"
+          valor={proyectosDestacados ?? 0}
+          sub="con badge destacado"
+          color="text-amber-600"
+          href="/proyectos"
+        />
+        <StatCard
+          label="Leads web (30 días)"
+          valor={leadsDesarrollosTotal}
+          sub="desde formulario web"
+          color="text-green-600"
+          href="/leads"
         />
       </div>
 
@@ -226,6 +308,52 @@ export default async function DashboardPage() {
           )}
         </div>
       </div>
+
+      {/* Ranking de desarrollos */}
+      {ranking.length > 0 && (
+        <div className="mt-6 rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+          <div className="mb-4 flex items-center justify-between">
+            <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-400">
+              Desarrollos con más leads (últimos 30 días)
+            </h2>
+            <Link
+              href="/proyectos"
+              className="text-xs font-medium text-accent hover:underline"
+            >
+              Ver todos →
+            </Link>
+          </div>
+          <div className="space-y-3">
+            {ranking.map((p, i) => {
+              const pct = Math.round((p.count / ranking[0].count) * 100);
+              return (
+                <div key={p.id} className="flex items-center gap-3">
+                  <span className="w-4 shrink-0 text-sm font-bold text-slate-300">
+                    {i + 1}
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <Link
+                      href={`/proyectos/${p.id}/editar?tab=leads`}
+                      className="block truncate text-sm font-medium text-slate-700 hover:text-accent"
+                    >
+                      {p.nombre}
+                    </Link>
+                    <div className="mt-1 h-1.5 overflow-hidden rounded-full bg-slate-100">
+                      <div
+                        className="h-full rounded-full bg-accent transition-all"
+                        style={{ width: `${pct}%` }}
+                      />
+                    </div>
+                  </div>
+                  <span className="shrink-0 text-sm font-semibold text-accent">
+                    {p.count}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
 
       {/* Actividad reciente */}
       <div className="mt-6 rounded-xl border border-slate-200 bg-white p-5 shadow-sm">

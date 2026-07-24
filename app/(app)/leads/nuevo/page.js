@@ -5,10 +5,12 @@ import LeadForm from "@/components/leads/LeadForm";
 
 export const dynamic = "force-dynamic";
 
-export default async function NuevoLeadPage() {
+export default async function NuevoLeadPage({ searchParams }) {
   const supabase = createClient();
-  const { contactos, propiedades, agentes, agenteDefault } =
+  const { contactos, propiedades, agentes, proyectos, agenteDefault } =
     await loadOpcionesLead(supabase);
+
+  const proyectoIdDefault = searchParams?.proyecto_id || null;
 
   return (
     <div className="mx-auto max-w-4xl">
@@ -23,7 +25,9 @@ export default async function NuevoLeadPage() {
         contactos={contactos}
         propiedades={propiedades}
         agentes={agentes}
+        proyectos={proyectos}
         agenteDefault={agenteDefault}
+        proyectoIdDefault={proyectoIdDefault}
       />
     </div>
   );

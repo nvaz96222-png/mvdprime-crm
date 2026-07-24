@@ -6,11 +6,12 @@ import { createClient } from "@/lib/supabase/client";
 
 const TIPO_MAP = { apartamento: "Apto", casa: "Casa", local: "Local", terreno: "Terreno", garage: "Garage" };
 const OP_MAP = { venta: "Venta", alquiler: "Alquiler" };
+const PROY_TIPO_MAP = { edificio: "Edificio", casa_en_pozo: "Casa en pozo", urbanizacion: "Urbanización", complejo_comercial: "Complejo comercial", local_comercial: "Local comercial", otro: "Otro" };
 
 export default function BuscadorGlobal() {
   const [abierto, setAbierto] = useState(false);
   const [query, setQuery] = useState("");
-  const [resultados, setResultados] = useState({ propiedades: [], contactos: [], leads: [] });
+  const [resultados, setResultados] = useState({ propiedades: [], contactos: [], leads: [], proyectos: [] });
   const [buscando, setBuscando] = useState(false);
   const [selIdx, setSelIdx] = useState(0);
   const inputRef = useRef(null);
@@ -35,7 +36,7 @@ export default function BuscadorGlobal() {
   useEffect(() => {
     if (abierto) {
       setQuery("");
-      setResultados({ propiedades: [], contactos: [], leads: [] });
+      setResultados({ propiedades: [], contactos: [], leads: [], proyectos: [] });
       setSelIdx(0);
       setTimeout(() => inputRef.current?.focus(), 50);
     }
@@ -49,7 +50,7 @@ export default function BuscadorGlobal() {
     setBuscando(true);
     const like = `%${q}%`;
 
-    const [{ data: props }, { data: conts }, { data: lds }] = await Promise.all([
+    const [{ data: props }, { data: conts }, { data: lds }, { data: proys }] = await Promise.all([
       supabase
         .from("propiedades")
         .select("id, titulo, tipo, operacion, barrio, precio, moneda, estado")
@@ -65,12 +66,18 @@ export default function BuscadorGlobal() {
         .select("id, etapa, contacto:contactos(nombre), propiedad:propiedades(titulo)")
         .ilike("contactos.nombre", like)
         .limit(4),
+      supabase
+        .from("proyectos")
+        .select("id, nombre, tipo, estado, barrio")
+        .or(`nombre.ilike.${like},barrio.ilike.${like}`)
+        .limit(4),
     ]);
 
     setResultados({
       propiedades: props || [],
       contactos: conts || [],
       leads: lds?.filter((l) => l.contacto?.nombre) || [],
+      proyectos: proys || [],
     });
     setBuscando(false);
     setSelIdx(0);
@@ -88,6 +95,7 @@ export default function BuscadorGlobal() {
     ...resultados.propiedades.map((p) => ({ tipo: "prop", data: p, href: `/propiedades/${p.id}/editar`, label: p.titulo, sub: [TIPO_MAP[p.tipo], OP_MAP[p.operacion], p.barrio].filter(Boolean).join(" · ") })),
     ...resultados.contactos.map((c) => ({ tipo: "cont", data: c, href: `/contactos/${c.id}`, label: c.nombre, sub: [c.telefono, c.email].filter(Boolean).join(" · ") })),
     ...resultados.leads.map((l) => ({ tipo: "lead", data: l, href: `/leads/${l.id}`, label: l.contacto?.nombre, sub: l.propiedad?.titulo || "Sin propiedad" })),
+    ...resultados.proyectos.map((p) => ({ tipo: "proy", data: p, href: `/proyectos/${p.id}/editar`, label: p.nombre, sub: [PROY_TIPO_MAP[p.tipo], p.barrio].filter(Boolean).join(" · ") })),
   ];
 
   function onKeyDown(e) {
@@ -185,6 +193,19 @@ export default function BuscadorGlobal() {
                     tipo: "lead", href: `/leads/${l.id}`,
                     label: l.contacto?.nombre,
                     sub: l.propiedad?.titulo || "Sin propiedad",
+                  }))}
+                  globalItems={items} selIdx={selIdx}
+                  onSelect={() => setAbierto(false)} router={router}
+                />
+              )}
+
+              {resultados.proyectos.length > 0 && (
+                <Seccion titulo="Proyectos" icono="🏗️"
+                  items={resultados.proyectos.map((p) => ({
+                    tipo: "proy", href: `/proyectos/${p.id}/editar`,
+                    label: p.nombre,
+                    sub: [PROY_TIPO_MAP[p.tipo], p.barrio].filter(Boolean).join(" · "),
+                    badge: p.estado,
                   }))}
                   globalItems={items} selIdx={selIdx}
                   onSelect={() => setAbierto(false)} router={router}
