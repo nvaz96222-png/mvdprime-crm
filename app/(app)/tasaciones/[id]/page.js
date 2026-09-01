@@ -63,12 +63,34 @@ export default async function TasacionDetallePage({ params }) {
             {ubicacion ? ` · ${ubicacion}` : ""}
           </p>
         </div>
-        <Link
-          href={`/tasaciones/${t.id}/editar`}
-          className="rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-100"
-        >
-          Editar
-        </Link>
+        <div className="flex flex-wrap items-center gap-2">
+          {t.propiedad?.id ? (
+            <Link
+              href={`/propiedades/${t.propiedad.id}/editar`}
+              className="inline-flex items-center gap-1.5 rounded-lg border border-accent/40 bg-accent/5 px-4 py-2 text-sm font-medium text-accent hover:bg-accent/10"
+            >
+              Ver propiedad vinculada
+            </Link>
+          ) : (
+            <Link
+              href={`/propiedades/nueva?tasacion=${t.id}`}
+              className="inline-flex items-center gap-1.5 rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-white hover:bg-accent-dark"
+            >
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                <line x1="12" y1="10" x2="12" y2="16" />
+                <line x1="9" y1="13" x2="15" y2="13" />
+              </svg>
+              Crear propiedad con este valor
+            </Link>
+          )}
+          <Link
+            href={`/tasaciones/${t.id}/editar`}
+            className="rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-100"
+          >
+            Editar
+          </Link>
+        </div>
       </div>
 
       {/* Rango de valor */}
@@ -100,7 +122,24 @@ export default async function TasacionDetallePage({ params }) {
               {t.moneda} {fmtM2(t.precio_m2_referencia)}
             </strong>
           </span>
-          {t.superficie != null && <span>Superficie: {t.superficie} m²</span>}
+          {(t.superficie_interior != null || t.superficie_exterior != null) ? (
+            <span>
+              Sup.: {t.superficie_interior || 0} m² int
+              {t.superficie_exterior ? ` + ${t.superficie_exterior} m² ext` : ""}
+              {` = ${t.superficie || 0} m² total`}
+            </span>
+          ) : (
+            t.superficie != null && <span>Superficie: {t.superficie} m²</span>
+          )}
+          {t.cochera_valor > 0 && (
+            <span>Cochera: +{fmtMonto(t.cochera_valor, t.moneda)}</span>
+          )}
+          {t.ajuste_extras_pct != null && Number(t.ajuste_extras_pct) !== 0 && (
+            <span>
+              Amenities/estado: {Number(t.ajuste_extras_pct) > 0 ? "+" : ""}
+              {Math.round(Number(t.ajuste_extras_pct) * 100)}%
+            </span>
+          )}
           <span>
             Margen de negociación:{" "}
             {Math.round((Number(t.margen_negociacion) || 0) * 100)}%
