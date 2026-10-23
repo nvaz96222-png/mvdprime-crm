@@ -1,0 +1,9 @@
+node_modules
+dist
+.DS_Store
+
+# La planilla de Pires Benlian trae además las listas de precios de ICON 26,
+# Jardines del Polo, SHE-Pocitos y Deco Maggiolo. Este repositorio es público,
+# así que el archivo se usa en local pero no se versiona.
+datos-fuente/*.xlsx
+__pycache__/

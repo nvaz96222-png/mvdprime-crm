@@ -1,0 +1,159 @@
+﻿unidad;piso;nivel;tipologia;dormitorios;banos;area_habitable;terrazas_uso_exclusivo;sub_total;areas_comunes;area_total;precio_usd;estado;precio_lista_pdf;estado_lista_pdf;observaciones
+101;1;1º PISO;2 dormitorios;2;1;61.9;43.2;105.1;9.53;114.63;199200;disponible;198000;disponible;
+102;1;1º PISO;1 dormitorio;1;1;37.29;23.0;60.29;5.24;65.53;134180;disponible;132980;disponible;
+103;1;1º PISO;1 dormitorio;1;1;37.44;23.0;60.44;5.26;65.7;134725;disponible;133525;disponible;
+104;1;1º PISO;1 dormitorio;1;1;37.44;23.0;60.44;5.26;65.7;134725;disponible;133525;disponible;
+105;1;1º PISO;1 dormitorio;1;1;37.27;23.0;60.27;5.23;65.5;134180;disponible;132980;disponible;
+106;1;1º PISO;2 dormitorios;2;1;55.61;38.87;94.48;7.81;102.29;195100;disponible;193900;disponible;
+107;1;1º PISO;Monoambiente;0;1;26.39;15.18;41.57;3.71;45.28;96575;disponible;95375;disponible;
+108;1;1º PISO;Monoambiente;0;1;26.39;15.54;41.93;3.71;45.64;97665;disponible;96465;disponible;
+109;1;1º PISO;2 dormitorios;2;1;51.28;47.85;99.13;7.2;106.33;180500;disponible;179300;disponible;
+110;1;1º PISO;1 dormitorio;1;1;36.01;15.54;51.55;5.06;56.61;122190;disponible;120990;disponible;
+111;1;1º PISO;1 dormitorio;1;1;36.59;15.18;51.77;5.14;56.91;123062;disponible;121862;disponible;
+112;1;1º PISO;2 dormitorios;2;1;52.52;52.01;104.53;7.38;111.91;185200;disponible;184000;disponible;
+113;1;1º PISO;1 dormitorio;1;1;37.27;51.55;88.82;5.23;94.05;145300;disponible;144100;disponible;
+114;1;1º PISO;1 dormitorio;1;1;37.44;51.87;89.31;5.26;94.57;146500;disponible;145300;disponible;
+115;1;1º PISO;1 dormitorio;1;1;37.44;52.19;89.63;5.26;94.89;146500;disponible;145300;disponible;
+116;1;1º PISO;1 dormitorio;1;1;37.29;52.52;89.81;5.24;95.05;146100;disponible;144900;disponible;
+201;2;2º PISO;2 dormitorios;2;1;61.9;6.77;68.67;9.53;78.2;188680;disponible;187480;disponible;
+202;2;2º PISO;1 dormitorio;1;1;37.29;6.9;44.19;5.74;49.93;123825;disponible;122625;disponible;
+203;2;2º PISO;1 dormitorio;1;1;37.44;6.9;44.34;5.76;50.1;124370;disponible;123170;disponible;
+204;2;2º PISO;1 dormitorio;1;1;37.44;6.9;44.34;5.76;50.1;124370;disponible;123170;disponible;
+205;2;2º PISO;1 dormitorio;1;1;37.27;6.9;44.17;5.74;49.91;123825;disponible;122625;disponible;
+206;2;2º PISO;2 dormitorios;2;1;55.61;5.6;61.21;8.56;69.77;168515;disponible;167315;disponible;
+207;2;2º PISO;Monoambiente;0;1;26.39;2.79;29.18;4.06;33.24;;vendido;83385;disponible;Estado a confirmar: la lista oficial en PDF (24/06/2026) la da como «disponible» y la planilla del 23/10/2026 como «vendido». Se muestra la más reciente.
+208;2;2º PISO;Monoambiente;0;1;26.39;3.15;29.54;4.06;33.6;85675;disponible;84475;disponible;
+209;2;2º PISO;2 dormitorios;2;1;51.28;4.67;55.95;7.89;63.84;154345;disponible;153145;disponible;
+210;2;2º PISO;1 dormitorio;1;1;36.01;3.15;39.16;5.54;44.7;113361;disponible;112161;disponible;
+211;2;2º PISO;1 dormitorio;1;1;36.59;2.79;39.38;5.63;45.01;114233;disponible;113033;disponible;
+212;2;2º PISO;2 dormitorios;2;1;52.52;5.07;57.59;8.08;65.67;158705;disponible;157505;disponible;
+213;2;2º PISO;1 dormitorio;1;1;37.27;6.9;44.17;5.74;49.91;123825;disponible;122625;disponible;
+214;2;2º PISO;1 dormitorio;1;1;37.44;6.9;44.34;5.76;50.1;124370;disponible;123170;disponible;
+215;2;2º PISO;1 dormitorio;1;1;37.44;6.9;44.34;5.76;50.1;124370;disponible;123170;disponible;
+216;2;2º PISO;1 dormitorio;1;1;37.29;6.9;44.19;5.74;49.93;123825;disponible;122625;disponible;
+301;3;3er. PISO;2 dormitorios;2;1;61.9;6.77;68.67;9.53;78.2;190206;disponible;189006;disponible;
+302;3;3er. PISO;1 dormitorio;1;1;37.29;6.9;44.19;5.74;49.93;;vendido;;vendido;
+303;3;3er. PISO;1 dormitorio;1;1;37.44;6.9;44.34;5.76;50.1;125351;disponible;124151;disponible;
+304;3;3er. PISO;1 dormitorio;1;1;37.44;6.9;44.34;5.76;50.1;125351;disponible;124151;disponible;
+305;3;3er. PISO;1 dormitorio;1;1;37.27;6.9;44.17;5.74;49.91;124806;disponible;123606;disponible;
+306;3;3er. PISO;2 dormitorios;2;1;55.61;5.6;61.21;8.56;69.77;169823;disponible;168623;disponible;
+307;3;3er. PISO;Monoambiente;0;1;26.39;2.79;29.18;4.06;33.24;85239;disponible;84039;disponible;
+308;3;3er. PISO;Monoambiente;0;1;26.39;3.15;29.54;4.06;33.6;86329;disponible;85129;disponible;
+309;3;3er. PISO;2 dormitorios;2;1;51.28;4.67;55.95;7.89;63.84;155544;disponible;154344;disponible;
+310;3;3er. PISO;1 dormitorio;1;1;36.01;3.15;39.16;5.54;44.7;114233;disponible;113033;disponible;
+311;3;3er. PISO;1 dormitorio;1;1;36.59;2.79;39.38;5.63;45.01;115105;disponible;113905;disponible;
+312;3;3er. PISO;2 dormitorios;2;1;52.52;5.07;57.59;8.08;65.67;160013;disponible;158813;disponible;
+313;3;3er. PISO;1 dormitorio;1;1;37.27;6.9;44.17;5.74;49.91;124806;disponible;123606;disponible;
+314;3;3er. PISO;1 dormitorio;1;1;37.44;6.9;44.34;5.76;50.1;125351;disponible;124151;disponible;
+315;3;3er. PISO;1 dormitorio;1;1;37.44;6.9;44.34;5.76;50.1;125351;disponible;124151;disponible;
+316;3;3er. PISO;1 dormitorio;1;1;37.29;6.9;44.19;5.74;49.93;124806;disponible;123606;disponible;
+401;4;4o. PISO;2 dormitorios;2;1;61.9;6.77;68.67;9.53;78.2;191732;disponible;190532;disponible;
+402;4;4o. PISO;1 dormitorio;1;1;37.29;6.9;44.19;5.74;49.93;125787;disponible;124587;disponible;
+403;4;4o. PISO;1 dormitorio;1;1;37.44;6.9;44.34;5.76;50.1;;vendido;;vendido;
+404;4;4o. PISO;1 dormitorio;1;1;37.44;6.9;44.34;5.76;50.1;;vendido;125132;disponible;Estado a confirmar: la lista oficial en PDF (24/06/2026) la da como «disponible» y la planilla del 23/10/2026 como «vendido». Se muestra la más reciente.
+405;4;4o. PISO;1 dormitorio;1;1;37.27;6.9;44.17;5.74;49.91;125787;disponible;124587;disponible;
+406;4;4o. PISO;2 dormitorios;2;1;55.61;5.6;61.21;8.56;69.77;171131;disponible;169931;disponible;
+407;4;4o. PISO;Monoambiente;0;1;26.39;2.79;29.18;4.06;33.24;;vendido;;vendido;
+408;4;4o. PISO;Monoambiente;0;1;26.39;3.15;29.54;4.06;33.6;86983;disponible;85783;disponible;
+409;4;4o. PISO;2 dormitorios;2;1;51.28;4.67;55.95;7.89;63.84;156743;disponible;155543;disponible;
+410;4;4o. PISO;1 dormitorio;1;1;36.01;3.15;39.16;5.54;44.7;115105;disponible;113905;disponible;
+411;4;4o. PISO;1 dormitorio;1;1;36.59;2.79;39.38;5.63;45.01;115977;disponible;114777;disponible;
+412;4;4o. PISO;2 dormitorios;2;1;52.52;5.07;57.59;8.08;65.67;161321;disponible;160121;disponible;
+413;4;4o. PISO;1 dormitorio;1;1;37.27;6.9;44.17;5.74;49.91;125787;disponible;124587;disponible;
+414;4;4o. PISO;1 dormitorio;1;1;37.44;6.9;44.34;5.76;50.1;126332;disponible;125132;disponible;
+415;4;4o. PISO;1 dormitorio;1;1;37.44;6.9;44.34;5.76;50.1;126332;disponible;125132;disponible;
+416;4;4o. PISO;1 dormitorio;1;1;37.29;6.9;44.19;5.74;49.93;125787;disponible;124587;disponible;
+501;5;5o. PISO;2 dormitorios;2;1;61.9;6.77;68.67;9.53;78.2;193258;disponible;192058;disponible;
+502;5;5o. PISO;1 dormitorio;1;1;37.29;6.9;44.19;5.74;49.93;126768;disponible;;vendido;Estado a confirmar: la lista oficial en PDF (24/06/2026) la da como «vendido» y la planilla del 23/10/2026 como «disponible». Se muestra la más reciente.
+503;5;5o. PISO;1 dormitorio;1;1;37.44;6.9;44.34;5.76;50.1;127313;disponible;;vendido;Estado a confirmar: la lista oficial en PDF (24/06/2026) la da como «vendido» y la planilla del 23/10/2026 como «disponible». Se muestra la más reciente.
+504;5;5o. PISO;1 dormitorio;1;1;37.44;6.9;44.34;5.76;50.1;127313;disponible;126113;disponible;
+505;5;5o. PISO;1 dormitorio;1;1;37.27;6.9;44.17;5.74;49.91;126768;disponible;125568;disponible;
+506;5;5o. PISO;2 dormitorios;2;1;55.61;5.6;61.21;8.56;69.77;172439;disponible;171239;disponible;
+507;5;5o. PISO;Monoambiente;0;1;26.39;2.79;29.18;4.06;33.24;;vendido;;vendido;
+508;5;5o. PISO;Monoambiente;0;1;26.39;3.15;29.54;4.06;33.6;87637;disponible;86437;disponible;
+509;5;5o. PISO;2 dormitorios;2;1;51.28;4.67;55.95;7.89;63.84;157942;disponible;156742;disponible;
+510;5;5o. PISO;1 dormitorio;1;1;36.01;3.15;39.16;5.54;44.7;115977;disponible;114777;disponible;
+511;5;5o. PISO;1 dormitorio;1;1;36.59;2.79;39.38;5.63;45.01;116849;disponible;115649;disponible;
+512;5;5o. PISO;2 dormitorios;2;1;52.52;5.07;57.59;8.08;65.67;162629;disponible;161429;disponible;
+513;5;5o. PISO;1 dormitorio;1;1;37.27;6.9;44.17;5.74;49.91;126768;disponible;125568;disponible;
+514;5;5o. PISO;1 dormitorio;1;1;37.44;6.9;44.34;5.76;50.1;127313;disponible;126113;disponible;
+515;5;5o. PISO;1 dormitorio;1;1;37.44;6.9;44.34;5.76;50.1;127313;disponible;126113;disponible;
+516;5;5o. PISO;1 dormitorio;1;1;37.29;6.9;44.19;5.74;49.93;126768;disponible;125568;disponible;
+601;6;6o. PISO;2 dormitorios;2;1;61.9;6.77;68.67;9.53;78.2;;vendido;193584;disponible;Estado a confirmar: la lista oficial en PDF (24/06/2026) la da como «disponible» y la planilla del 23/10/2026 como «vendido». Se muestra la más reciente.
+602;6;6o. PISO;1 dormitorio;1;1;37.29;6.9;44.19;5.74;49.93;;vendido;;vendido;
+603;6;6o. PISO;1 dormitorio;1;1;37.44;6.9;44.34;5.76;50.1;;vendido;;vendido;
+604;6;6o. PISO;1 dormitorio;1;1;37.44;6.9;44.34;5.76;50.1;;vendido;;vendido;
+605;6;6o. PISO;1 dormitorio;1;1;37.27;6.9;44.17;5.74;49.91;;vendido;;vendido;
+606;6;6o. PISO;2 dormitorios;2;1;55.61;5.6;61.21;8.56;69.77;173856;disponible;172656;disponible;
+607;6;6o. PISO;Monoambiente;0;1;26.39;2.79;29.18;4.06;33.24;87201;disponible;86001;disponible;
+608;6;6o. PISO;Monoambiente;0;1;26.39;3.15;29.54;4.06;33.6;88291;disponible;87091;disponible;
+609;6;6o. PISO;2 dormitorios;2;1;51.28;4.67;55.95;7.89;63.84;159142;disponible;;vendido;Estado a confirmar: la lista oficial en PDF (24/06/2026) la da como «vendido» y la planilla del 23/10/2026 como «disponible». Se muestra la más reciente.
+610;6;6o. PISO;1 dormitorio;1;1;36.01;3.15;39.16;5.54;44.7;116849;disponible;115649;disponible;
+611;6;6o. PISO;1 dormitorio;1;1;36.59;2.79;39.38;5.63;45.01;117721;disponible;116521;disponible;
+612;6;6o. PISO;2 dormitorios;2;1;52.52;5.07;57.59;8.08;65.67;163937;disponible;162737;disponible;
+613;6;6o. PISO;1 dormitorio;1;1;37.27;6.9;44.17;5.74;49.91;127749;disponible;126549;disponible;
+614;6;6o. PISO;1 dormitorio;1;1;37.44;6.9;44.34;5.76;50.1;128294;disponible;127094;disponible;
+615;6;6o. PISO;1 dormitorio;1;1;37.44;6.9;44.34;5.76;50.1;128294;disponible;127094;disponible;
+616;6;6o. PISO;1 dormitorio;1;1;37.29;6.9;44.19;5.74;49.93;127749;disponible;126549;disponible;
+701;7;7o. PISO;2 dormitorios;2;1;61.9;6.77;68.67;9.53;78.2;196310;disponible;195110;disponible;
+702;7;7o. PISO;1 dormitorio;1;1;37.29;6.9;44.19;5.74;49.93;;vendido;;vendido;
+703;7;7o. PISO;1 dormitorio;1;1;37.44;6.9;44.34;5.76;50.1;;vendido;;vendido;
+704;7;7o. PISO;1 dormitorio;1;1;37.44;6.9;44.34;5.76;50.1;;vendido;;vendido;
+705;7;7o. PISO;1 dormitorio;1;1;37.27;6.9;44.17;5.74;49.91;;vendido;;vendido;
+706;7;7o. PISO;2 dormitorios;2;1;55.61;5.6;61.21;8.56;69.77;175273;disponible;174073;disponible;
+707;7;7o. PISO;Monoambiente;0;1;26.39;2.79;29.18;4.06;33.24;87855;disponible;86655;disponible;
+708;7;7o. PISO;Monoambiente;0;1;26.39;3.15;29.54;4.06;33.6;;vendido;;vendido;
+709;7;7o. PISO;2 dormitorios;2;1;51.28;4.67;55.95;7.89;63.84;160558;disponible;159358;disponible;
+710;7;7o. PISO;1 dormitorio;1;1;36.01;3.15;39.16;5.54;44.7;117721;disponible;116521;disponible;
+711;7;7o. PISO;1 dormitorio;1;1;36.59;2.79;39.38;5.63;45.01;118702;disponible;117502;disponible;
+712;7;7o. PISO;2 dormitorios;2;1;52.52;5.07;57.59;8.08;65.67;165245;disponible;164045;disponible;
+713;7;7o. PISO;1 dormitorio;1;1;37.27;6.9;44.17;5.74;49.91;;vendido;127530;disponible;Estado a confirmar: la lista oficial en PDF (24/06/2026) la da como «disponible» y la planilla del 23/10/2026 como «vendido». Se muestra la más reciente.
+714;7;7o. PISO;1 dormitorio;1;1;37.44;6.9;44.34;5.76;50.1;;vendido;;vendido;
+715;7;7o. PISO;1 dormitorio;1;1;37.44;6.9;44.34;5.76;50.1;;vendido;128075;disponible;Estado a confirmar: la lista oficial en PDF (24/06/2026) la da como «disponible» y la planilla del 23/10/2026 como «vendido». Se muestra la más reciente.
+716;7;7o. PISO;1 dormitorio;1;1;37.29;6.9;44.19;5.74;49.93;;vendido;127530;disponible;Estado a confirmar: la lista oficial en PDF (24/06/2026) la da como «disponible» y la planilla del 23/10/2026 como «vendido». Se muestra la más reciente.
+801;8;8o. PISO;2 dormitorios;2;1;61.9;6.77;68.67;9.53;78.2;;vendido;;vendido;
+802;8;8o. PISO;1 dormitorio;1;1;37.29;6.9;44.19;5.74;49.93;;vendido;;vendido;
+803;8;8o. PISO;1 dormitorio;1;1;37.44;6.9;44.34;5.76;50.1;;vendido;;vendido;
+804;8;8o. PISO;1 dormitorio;1;1;37.44;6.9;44.34;5.76;50.1;;vendido;;vendido;
+805;8;8o. PISO;1 dormitorio;1;1;37.27;6.9;44.17;5.74;49.91;;vendido;;vendido;
+806;8;8o. PISO;2 dormitorios;2;1;55.61;5.6;61.21;8.56;69.77;176690;disponible;175490;disponible;
+807;8;8o. PISO;Monoambiente;0;1;26.39;2.79;29.18;4.06;33.24;;vendido;87309;disponible;Estado a confirmar: la lista oficial en PDF (24/06/2026) la da como «disponible» y la planilla del 23/10/2026 como «vendido». Se muestra la más reciente.
+808;8;8o. PISO;Monoambiente;0;1;26.39;3.15;29.54;4.06;33.6;;vendido;88399;disponible;Estado a confirmar: la lista oficial en PDF (24/06/2026) la da como «disponible» y la planilla del 23/10/2026 como «vendido». Se muestra la más reciente.
+809;8;8o. PISO;2 dormitorios;2;1;51.28;4.67;55.95;7.89;63.84;161866;disponible;160666;disponible;
+810;8;8o. PISO;1 dormitorio;1;1;36.01;3.15;39.16;5.54;44.7;118702;disponible;117502;disponible;
+811;8;8o. PISO;1 dormitorio;1;1;36.59;2.79;39.38;5.63;45.01;119683;disponible;118483;disponible;
+812;8;8o. PISO;2 dormitorios;2;1;52.52;5.07;57.59;8.08;65.67;166553;disponible;165353;disponible;
+813;8;8o. PISO;1 dormitorio;1;1;37.27;6.9;44.17;5.74;49.91;;vendido;;vendido;
+814;8;8o. PISO;1 dormitorio;1;1;37.44;6.9;44.34;5.76;50.1;;vendido;;vendido;
+815;8;8o. PISO;1 dormitorio;1;1;37.44;6.9;44.34;5.76;50.1;;vendido;;vendido;
+816;8;8o. PISO;1 dormitorio;1;1;37.29;6.9;44.19;5.74;49.93;129711;disponible;128511;disponible;
+901;9;9o. PISO;2 dormitorios;2;1;61.9;6.77;68.67;9.53;78.2;;vendido;;vendido;
+902;9;9o. PISO;1 dormitorio;1;1;37.29;6.9;44.19;5.74;49.93;;vendido;;vendido;
+903;9;9o. PISO;1 dormitorio;1;1;37.44;6.9;44.34;5.76;50.1;;vendido;;vendido;
+904;9;9o. PISO;1 dormitorio;1;1;37.44;6.9;44.34;5.76;50.1;;vendido;;vendido;
+905;9;9o. PISO;1 dormitorio;1;1;37.27;6.9;44.17;5.74;49.91;;vendido;;vendido;
+906;9;9o. PISO;2 dormitorios;2;1;55.61;5.6;61.21;8.56;69.77;178107;disponible;176907;disponible;
+907;9;9o. PISO;Monoambiente;0;1;26.39;2.79;29.18;4.06;33.24;;vendido;;vendido;
+908;9;9o. PISO;Monoambiente;0;1;26.39;3.15;29.54;4.06;33.6;;vendido;89053;disponible;Estado a confirmar: la lista oficial en PDF (24/06/2026) la da como «disponible» y la planilla del 23/10/2026 como «vendido». Se muestra la más reciente.
+909;9;9o. PISO;2 dormitorios;2;1;51.28;4.67;55.95;7.89;63.84;163174;disponible;161974;disponible;
+910;9;9o. PISO;1 dormitorio;1;1;36.01;3.15;39.16;5.54;44.7;119683;disponible;118483;disponible;
+911;9;9o. PISO;1 dormitorio;1;1;36.59;2.79;39.38;5.63;45.01;120664;disponible;119464;disponible;
+912;9;9o. PISO;2 dormitorios;2;1;52.52;5.07;57.59;8.08;65.67;167861;disponible;166661;disponible;
+913;9;9o. PISO;1 dormitorio;1;1;37.27;6.9;44.17;5.74;49.91;;vendido;129492;disponible;Estado a confirmar: la lista oficial en PDF (24/06/2026) la da como «disponible» y la planilla del 23/10/2026 como «vendido». Se muestra la más reciente.
+914;9;9o. PISO;1 dormitorio;1;1;37.44;6.9;44.34;5.76;50.1;;vendido;130037;disponible;Estado a confirmar: la lista oficial en PDF (24/06/2026) la da como «disponible» y la planilla del 23/10/2026 como «vendido». Se muestra la más reciente.
+915;9;9o. PISO;1 dormitorio;1;1;37.44;6.9;44.34;5.76;50.1;131237;disponible;;vendido;Estado a confirmar: la lista oficial en PDF (24/06/2026) la da como «vendido» y la planilla del 23/10/2026 como «disponible». Se muestra la más reciente.
+916;9;9o. PISO;1 dormitorio;1;1;37.29;6.9;44.19;5.74;49.93;;vendido;;vendido;
+1001;10;10o. PISO;1 dormitorio;1;1;48.49;20.27;68.76;11.48;80.24;191900;disponible;190700;disponible;
+1002;10;10o. PISO;1 dormitorio;1;1;40.14;48.38;88.52;9.51;98.03;;vendido;;vendido;
+1003;10;10o. PISO;1 dormitorio;1;1;40.13;48.38;88.51;9.51;98.02;176700;disponible;175500;disponible;
+1004;10;10o. PISO;1 dormitorio;1;1;44.69;16.45;61.14;10.58;71.72;175200;disponible;174000;disponible;
+1005;10;10o. PISO;Monoambiente;0;1;26.39;2.79;29.18;4.06;33.24;101100;disponible;99900;disponible;
+1006;10;10o. PISO;Monoambiente;0;1;26.39;3.15;29.54;4.06;33.6;101900;disponible;100700;disponible;
+1007;10;10o. PISO;2 dormitorios;2;1;51.28;4.67;55.95;7.89;63.84;176700;disponible;175500;disponible;
+1008;10;10o. PISO;1 dormitorio;1;1;36.01;3.15;39.16;5.54;44.7;130200;disponible;129000;disponible;
+1009;10;10o. PISO;1 dormitorio;1;1;36.59;2.79;39.38;5.63;45.01;131000;disponible;129800;disponible;
+1010;10;10o. PISO;2 dormitorios;2;1;52.52;5.07;57.59;8.08;65.67;181800;disponible;180600;disponible;
+1011;10;10o. PISO;1 dormitorio;1;1;37.27;6.9;44.17;5.74;49.91;145200;disponible;144000;disponible;
+1012;10;10o. PISO;1 dormitorio;1;1;37.44;6.9;44.34;5.76;50.1;145600;disponible;144400;disponible;
+1013;10;10o. PISO;1 dormitorio;1;1;37.44;6.9;44.34;5.76;50.1;145600;disponible;144400;disponible;
+1014;10;10o. PISO;1 dormitorio;1;1;37.29;6.9;44.19;5.74;49.93;145200;disponible;144000;disponible;
