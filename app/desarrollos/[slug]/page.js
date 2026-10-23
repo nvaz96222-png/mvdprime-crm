@@ -14,11 +14,14 @@ import BtnCompartir from "@/components/public/BtnCompartir";
 import DesarrolloCard from "@/components/public/DesarrolloCard";
 import BeaconVista from "@/components/public/BeaconVista";
 import BtnTrackableLink from "@/components/public/BtnTrackableLink";
+import SelectorUnidades from "@/components/public/SelectorUnidades";
+import { cargarSelector } from "@/lib/desarrollos/selector";
 
 export const revalidate = 300; // 5 minutos — contenido del proyecto cambia poco
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://mvdprime.uy";
 const WHATSAPP_AGENCIA = process.env.NEXT_PUBLIC_WHATSAPP_AGENCIA || "59899000000";
+const EMAIL_CONTACTO = process.env.NEXT_PUBLIC_EMAIL_CONTACTO || "";
 const ESTADOS_PUBLICOS = ["en_comercializacion", "proximamente", "en_obra", "entregado"];
 
 // ─── Metadata ────────────────────────────────────────────────────────────────
@@ -124,6 +127,9 @@ export default async function DesarrolloDetallePage({ params }) {
           .limit(3)
       : Promise.resolve({ data: [] }),
   ]);
+
+  // 3. Selector de unidades, si este desarrollo tiene las plantas relevadas
+  const selector = await cargarSelector(proyecto.slug);
 
   // ── Derivados ─────────────────────────────────────────────────────────────
   const portada = fotos?.find((f) => f.es_principal) || fotos?.[0] || null;
@@ -338,6 +344,15 @@ export default async function DesarrolloDetallePage({ params }) {
           </div>
         )}
 
+        {/* Selector de unidades sobre las plantas del proyecto */}
+        {selector && (
+          <SelectorUnidades
+            datos={selector.datos}
+            plantas={selector.plantas}
+            proyectoNombre={proyecto.nombre}
+          />
+        )}
+
         {/* Grid principal */}
         <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-3">
           {/* Columna izquierda */}
@@ -527,11 +542,27 @@ export default async function DesarrolloDetallePage({ params }) {
               </div>
 
               {/* Formulario de contacto */}
-              <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+              <div
+                id="contacto-desarrollo"
+                className="scroll-mt-24 rounded-xl border border-slate-200 bg-white p-5 shadow-sm"
+              >
                 <FormContactoProyecto
                   proyectoId={proyecto.id}
                   proyectoNombre={proyecto.nombre}
                 />
+                {EMAIL_CONTACTO && (
+                  <p className="mt-4 border-t border-slate-100 pt-4 text-sm text-slate-500">
+                    O escribinos a{" "}
+                    <a
+                      href={`mailto:${EMAIL_CONTACTO}?subject=${encodeURIComponent(
+                        `Consulta por ${proyecto.nombre}`
+                      )}`}
+                      className="font-medium text-accent underline-offset-2 hover:underline"
+                    >
+                      {EMAIL_CONTACTO}
+                    </a>
+                  </p>
+                )}
               </div>
             </div>
           </div>

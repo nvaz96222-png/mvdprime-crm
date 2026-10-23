@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function FormContactoProyecto({ proyectoId, proyectoNombre }) {
   const [form, setForm] = useState({
@@ -12,6 +12,19 @@ export default function FormContactoProyecto({ proyectoId, proyectoNombre }) {
   });
   const [estado, setEstado] = useState("idle");
   const [errorMsg, setErrorMsg] = useState("");
+  const [unidad, setUnidad] = useState(null);
+
+  // El selector de unidades avisa qué apartamento eligió el visitante para
+  // que la consulta salga con esa unidad ya escrita (ver SelectorUnidades).
+  useEffect(() => {
+    function alElegirUnidad(e) {
+      setUnidad(e.detail?.titulo || null);
+      if (e.detail?.mensaje) set("mensaje", e.detail.mensaje);
+      setEstado("idle");
+    }
+    window.addEventListener("mvdprime:unidad-elegida", alElegirUnidad);
+    return () => window.removeEventListener("mvdprime:unidad-elegida", alElegirUnidad);
+  }, []);
 
   function set(k, v) {
     setForm((f) => ({ ...f, [k]: v }));
@@ -91,7 +104,16 @@ export default function FormContactoProyecto({ proyectoId, proyectoNombre }) {
         style={{ position: "absolute", left: "-9999px", opacity: 0, pointerEvents: "none" }}
       />
       <p className="text-sm font-semibold text-navy">Solicitar información</p>
-      <p className="text-xs text-slate-500">Te contactamos sin compromiso.</p>
+      {unidad ? (
+        <p className="flex items-center gap-1.5 text-xs text-slate-500">
+          Consulta por la
+          <span className="rounded-full bg-accent/10 px-2 py-0.5 font-semibold text-accent">
+            {unidad}
+          </span>
+        </p>
+      ) : (
+        <p className="text-xs text-slate-500">Te contactamos sin compromiso.</p>
+      )}
 
       <div>
         <label className="mb-1 block text-xs font-medium text-slate-600">
