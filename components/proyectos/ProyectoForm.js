@@ -29,7 +29,15 @@ function SeccionHeader({ titulo }) {
   );
 }
 
-export default function ProyectoForm({ proyecto, agentes = [], agenteDefault = null }) {
+export default function ProyectoForm({
+  proyecto,
+  agentes = [],
+  agenteDefault = null,
+  // Cantidad de unidades cargadas. Con unidades, el rango de precios lo
+  // calcula la base a partir de las disponibles y este formulario no lo pisa.
+  unidadesCount = 0,
+}) {
+  const precioAutomatico = unidadesCount > 0;
   const router = useRouter();
   const supabase = createClient();
 
@@ -57,6 +65,9 @@ export default function ProyectoForm({ proyecto, agentes = [], agenteDefault = n
     destacado:              proyecto?.destacado || false,
     lat:                    proyecto?.lat ?? "",
     lng:                    proyecto?.lng ?? "",
+    aviso_precios:          proyecto?.aviso_precios || "",
+    conexiones:             proyecto?.conexiones || "",
+    forma_de_pago:          proyecto?.forma_de_pago || "",
   });
 
   const [guardando, setGuardando] = useState(false);
@@ -113,9 +124,13 @@ export default function ProyectoForm({ proyecto, agentes = [], agenteDefault = n
         barrio:                 form.barrio || null,
         departamento:           form.departamento || null,
         direccion:              form.direccion || null,
-        precio_desde:           pd,
-        precio_hasta:           ph,
+        // Con unidades cargadas el rango lo mantiene el trigger de la base:
+        // mandarlo desde acá lo pisaría hasta el próximo cambio de unidad.
+        ...(precioAutomatico ? {} : { precio_desde: pd, precio_hasta: ph }),
         moneda:                 form.moneda,
+        aviso_precios:          form.aviso_precios || null,
+        conexiones:             form.conexiones || null,
+        forma_de_pago:          form.forma_de_pago || null,
         superficie_desde:       sd,
         superficie_hasta:       sh,
         dormitorios_desde:      dd,
@@ -312,7 +327,8 @@ export default function ProyectoForm({ proyecto, agentes = [], agenteDefault = n
               min="0"
               value={form.precio_desde}
               onChange={(e) => set("precio_desde", e.target.value)}
-              className={`mt-1 ${inputClass}`}
+              disabled={precioAutomatico}
+              className={`mt-1 ${inputClass} ${precioAutomatico ? "bg-slate-50 text-slate-500" : ""}`}
               placeholder="0"
             />
           </div>
@@ -323,11 +339,62 @@ export default function ProyectoForm({ proyecto, agentes = [], agenteDefault = n
               min="0"
               value={form.precio_hasta}
               onChange={(e) => set("precio_hasta", e.target.value)}
-              className={`mt-1 ${inputClass}`}
+              disabled={precioAutomatico}
+              className={`mt-1 ${inputClass} ${precioAutomatico ? "bg-slate-50 text-slate-500" : ""}`}
               placeholder="0"
             />
           </div>
         </div>
+        {precioAutomatico && (
+          <p className="mt-3 text-xs text-slate-400">
+            El rango se calcula solo con las {unidadesCount} unidades cargadas: toma la
+            más barata y la más cara entre las disponibles. Se actualiza cada vez que
+            cambiás un precio o un estado en la pestaña Unidades.
+          </p>
+        )}
+      </div>
+
+      {/* Condiciones comerciales — letra chica del selector en la web */}
+      <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+        <SeccionHeader titulo="Condiciones comerciales" />
+        <div className="space-y-4">
+          <div>
+            <label className={labelClass}>Forma de pago</label>
+            <input
+              type="text"
+              value={form.forma_de_pago}
+              onChange={(e) => set("forma_de_pago", e.target.value)}
+              className={`mt-1 ${inputClass}`}
+              placeholder="25% compromiso · 6 trimestres de 10% · 15% a la entrega"
+            />
+          </div>
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <div>
+              <label className={labelClass}>Costos de conexión</label>
+              <input
+                type="text"
+                value={form.conexiones}
+                onChange={(e) => set("conexiones", e.target.value)}
+                className={`mt-1 ${inputClass}`}
+                placeholder="Conexiones: 4% del precio de venta."
+              />
+            </div>
+            <div>
+              <label className={labelClass}>Aviso sobre los precios</label>
+              <input
+                type="text"
+                value={form.aviso_precios}
+                onChange={(e) => set("aviso_precios", e.target.value)}
+                className={`mt-1 ${inputClass}`}
+                placeholder="Precios sujetos a ajuste por avance de ventas."
+              />
+            </div>
+          </div>
+        </div>
+        <p className="mt-3 text-xs text-slate-400">
+          Se muestran junto a la ficha de cada unidad en la web. Si quedan vacíos, no
+          aparece nada.
+        </p>
       </div>
 
       {/* Dimensiones y unidades */}

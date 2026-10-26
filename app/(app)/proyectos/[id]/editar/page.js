@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { loadOpcionesProyecto } from "@/lib/data/proyectos";
 import ProyectoForm from "@/components/proyectos/ProyectoForm";
 import TipologiasEditor from "@/components/proyectos/TipologiasEditor";
+import UnidadesEditor from "@/components/proyectos/UnidadesEditor";
 import ProyectoLeadsPanel from "@/components/proyectos/ProyectoLeadsPanel";
 import { PROYECTO_ESTADO_MAP, PROYECTO_TIPO_MAP } from "@/lib/constants";
 
@@ -12,6 +13,7 @@ export const dynamic = "force-dynamic";
 const TABS = [
   { id: "info",       label: "Información" },
   { id: "tipologias", label: "Tipologías" },
+  { id: "unidades",   label: "Unidades" },
   { id: "documentos", label: "Documentos" },
   { id: "fotos",      label: "Fotos" },
   { id: "leads",      label: "Leads" },
@@ -42,6 +44,7 @@ export default async function EditarProyectoPage({ params, searchParams }) {
     fotosResult,
     documentosResult,
     tipologiasResult,
+    unidadesResult,
     agentesResult,
     leadsResult,
   ] = await Promise.all([
@@ -67,6 +70,19 @@ export default async function EditarProyectoPage({ params, searchParams }) {
           .eq("proyecto_id", params.id)
           .order("orden")
       : Promise.resolve({ data: null }),
+    tab === "unidades"
+      ? supabase
+          .from("proyecto_unidades")
+          .select(
+            "id, codigo, etiqueta, tipo, piso, nivel, tipologia, sup_total, " +
+              "precio, moneda, estado, observaciones, editado_en"
+          )
+          .eq("proyecto_id", params.id)
+          // Por piso y después por código: el orden en que se lee la lista
+          // oficial del desarrollador.
+          .order("piso", { nullsFirst: false })
+          .order("codigo")
+      : Promise.resolve({ data: null }),
     tab === "info"
       ? loadOpcionesProyecto(supabase)
       : Promise.resolve({ agentes: [] }),
@@ -81,15 +97,22 @@ export default async function EditarProyectoPage({ params, searchParams }) {
       : Promise.resolve({ data: null }),
   ]);
 
-  // Contar leads para badge — siempre
-  const { count: leadsCount } = await supabase
-    .from("leads")
-    .select("*", { count: "exact", head: true })
-    .eq("proyecto_id", params.id);
+  // Contadores para los badges y para el formulario — siempre
+  const [{ count: leadsCount }, { count: unidadesCount }] = await Promise.all([
+    supabase
+      .from("leads")
+      .select("*", { count: "exact", head: true })
+      .eq("proyecto_id", params.id),
+    supabase
+      .from("proyecto_unidades")
+      .select("*", { count: "exact", head: true })
+      .eq("proyecto_id", params.id),
+  ]);
 
   const fotos = fotosResult.data;
   const documentos = documentosResult.data;
   const tipologias = tipologiasResult.data;
+  const unidades = unidadesResult.data;
   const { agentes } = agentesResult;
   const leads = leadsResult.data;
 
@@ -148,9 +171,10 @@ export default async function EditarProyectoPage({ params, searchParams }) {
             }`}
           >
             {t.label}
-            {t.id === "leads" && (leadsCount ?? 0) > 0 && (
+            {((t.id === "leads" && (leadsCount ?? 0) > 0) ||
+              (t.id === "unidades" && (unidadesCount ?? 0) > 0)) && (
               <span className="rounded-full bg-accent/10 px-1.5 py-0.5 text-xs font-semibold text-accent">
-                {leadsCount}
+                {t.id === "leads" ? leadsCount : unidadesCount}
               </span>
             )}
           </Link>
@@ -159,7 +183,11 @@ export default async function EditarProyectoPage({ params, searchParams }) {
 
       {/* ── Tab: Información ─────────────────────────────────── */}
       {tab === "info" && (
-        <ProyectoForm proyecto={proyecto} agentes={agentes} />
+        <ProyectoForm
+          proyecto={proyecto}
+          agentes={agentes}
+          unidadesCount={unidadesCount ?? 0}
+        />
       )}
 
       {/* ── Tab: Tipologías ──────────────────────────────────── */}
@@ -169,6 +197,11 @@ export default async function EditarProyectoPage({ params, searchParams }) {
           monedaProyecto={proyecto.moneda || "USD"}
           tipologiasIniciales={tipologias || []}
         />
+      )}
+
+      {/* ── Tab: Unidades ────────────────────────────────────── */}
+      {tab === "unidades" && (
+        <UnidadesEditor unidadesIniciales={unidades || []} />
       )}
 
       {/* ── Tab: Documentos ──────────────────────────────────── */}

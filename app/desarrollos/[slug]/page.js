@@ -129,7 +129,7 @@ export default async function DesarrolloDetallePage({ params }) {
   ]);
 
   // 3. Selector de unidades, si este desarrollo tiene las plantas relevadas
-  const selector = await cargarSelector(proyecto.slug);
+  const selector = await cargarSelector(supabase, proyecto);
 
   // ── Derivados ─────────────────────────────────────────────────────────────
   const portada = fotos?.find((f) => f.es_principal) || fotos?.[0] || null;
