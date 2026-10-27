@@ -11,9 +11,11 @@ CANAL                      ENTRADA                        PIPELINE              
 ─────                      ───────                        ────────                    ───
 Ficha propiedad /p/[id] ─→ POST /api/contacto-web ──┐
 Desarrollos /desarrollos → POST /api/contacto-proyecto ─┤
-Meta Ads / Google Ads /                                 ├─→ lib/leads/ingesta.js ─→ contactos
-Zapier / Make / landings → POST /api/leads/inbound ─────┤    (ingestarLead)          leads
-Preguntas MercadoLibre  ─→ POST /api/mercadolibre/      │         │                  interacciones
+WhatsApp / Instagram /                                  │
+Meta Lead Ads           ─→ POST /api/meta/webhook ──────┼─→ lib/leads/ingesta.js ─→ contactos
+Google Ads / Zapier /                                   │    (ingestarLead)          leads
+Make / landings         ─→ POST /api/leads/inbound ─────┤         │                  interacciones
+Preguntas MercadoLibre  ─→ POST /api/mercadolibre/      │         │        conversaciones / mensajes
                             notificaciones ─────────────┘         ↓
 Manual (agente)         ─→ LeadForm en el CRM            lead_ingesta_log
                             (client-side, con sesión)     (trazabilidad de TODO)
@@ -43,7 +45,7 @@ Pasos (cada uno con su registro de trazabilidad):
 
 | Columna | Uso |
 |---|---|
-| `canal` | `contacto-web` \| `contacto-proyecto` \| `inbound` \| `mercadolibre` |
+| `canal` | `contacto-web` \| `contacto-proyecto` \| `inbound` \| `mercadolibre` \| `meta` |
 | `estado` | `recibido` → `ok` \| `error` \| `invalido` |
 | `paso_fallido` | `validacion` \| `contacto` \| `lead` \| `interaccion` |
 | `payload` | JSON completo del intento — sirve de dead-letter queue |
@@ -125,15 +127,38 @@ Para **Meta Lead Ads, Google Ads, Zapier, Make** o cualquier canal futuro.
 - **Prerequisito:** cuenta ML conectada (OAuth vía `/api/mercadolibre/conectar`).
 - **Siempre responde 200** (ML reintenta si no) — los errores quedan en el log.
 
-### 5. WhatsApp — estado actual: SIN integración automática
+### 5. Meta — WhatsApp / Instagram / Lead Ads (automático, sin Zapier)
 
-Los botones de WhatsApp del CRM y la web abren `wa.me` → la conversación
-va al teléfono de la agencia, **no genera lead automático**. Opciones:
+Integración directa con Meta vía webhook propio. Setup completo en
+[docs/meta-setup.md](./meta-setup.md).
 
-- **Hoy (manual):** el agente crea el lead desde el CRM con origen `whatsapp`.
-- **Futuro (automático):** WhatsApp Business Cloud API (requiere verificación
-  del negocio en Meta) → webhook de mensajes entrantes → POST a
-  `/api/leads/inbound` con `origen=whatsapp`. El punto de entrada ya existe.
+- **Endpoint:** `POST /api/meta/webhook` (en `APIS_PUBLICAS`).
+  - `GET`: verificación de Meta (`hub.verify_token == META_VERIFY_TOKEN`).
+  - `POST`: valida la firma `X-Hub-Signature-256` (HMAC-SHA256 con
+    `META_APP_SECRET`) sobre el body **crudo**. Firma inválida → 401. Todo lo
+    demás → **200 siempre**; los errores van a `lead_ingesta_log` (canal `meta`)
+    para que Meta no deshabilite el webhook.
+- **Lógica:** `lib/meta/` (`firma.js`, `graph.js`, `conversaciones.js`,
+  `procesador.js`), no en la route.
+- **WhatsApp:** mensajes entrantes → conversación + mensaje + lead
+  (`reutilizarLeadAbierto`: no crea un lead nuevo por cada mensaje si ya hay uno
+  abierto). Con `referral` (Click-to-WhatsApp, solo el primer mensaje):
+  `origen=meta_ads` + `meta_ad_id` + `ctwa_clid` + propiedad por `meta_anuncios`.
+  Los **ecos** (`message_echoes`, coexistencia con la app del celular) se guardan
+  como salientes (`autor=app`). Los `statuses` actualizan `mensajes.estado`.
+- **Instagram:** DMs → contacto por `instagram_id` (sin teléfono), `origen=instagram`
+  (o `meta_ads` con referral). Ecos (`is_echo`) como salientes.
+- **Lead Ads:** `leadgen` → se lee el lead con la Graph API
+  (`META_PAGE_ACCESS_TOKEN`), se mapea `field_data` y entra como `meta_ads` con
+  `meta_lead_id` (UNIQUE → idempotencia si Meta reintenta).
+- **Asignación de propiedad** (en orden): anuncio en `meta_anuncios` → link de
+  ficha `/p/<uuid>` detectado en el texto → sin propiedad (se asigna a mano).
+  Se registra también en `lead_propiedades` (N:N).
+- **Conversaciones/mensajes:** tablas `conversaciones` y `mensajes` (Realtime
+  activado) — base de la bandeja de chats (Fase 2) y el agente IA (Fase 3).
+
+> El `/api/leads/inbound` sigue existiendo para Google Ads / Zapier / Make y
+> cualquier canal de terceros. Meta ya **no** necesita Zapier.
 
 ### 6. Manual (CRM)
 

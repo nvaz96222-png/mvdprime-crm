@@ -5,6 +5,7 @@ import { loadOpcionesPropiedad } from "@/lib/data/propiedades";
 import PropiedadForm from "@/components/propiedades/PropiedadForm";
 import BtnCopiarFicha from "@/components/public/BtnCopiarFicha";
 import BtnPublicarML from "@/components/propiedades/BtnPublicarML";
+import MetaAnunciosAdmin from "@/components/propiedades/MetaAnunciosAdmin";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { estaConectado } from "@/lib/mercadolibre";
 
@@ -50,6 +51,19 @@ export default async function EditarPropiedadPage({ params }) {
     mlConectado = await estaConectado(createAdminClient());
   } catch {
     // Sin service_role o sin tabla: el botón mostrará "Conectar".
+  }
+
+  // Anuncios de Meta vinculados a esta propiedad (atribución de leads).
+  let metaAnuncios = [];
+  try {
+    const { data } = await createAdminClient()
+      .from("meta_anuncios")
+      .select("*")
+      .eq("propiedad_id", params.id)
+      .order("created_at", { ascending: false });
+    metaAnuncios = data || [];
+  } catch {
+    // La tabla meta_anuncios todavía no fue migrada: sección vacía.
   }
 
   return (
@@ -123,6 +137,10 @@ export default async function EditarPropiedadPage({ params }) {
             mlPermalink={propiedad.ml_permalink}
             mlError={propiedad.ml_error}
           />
+        </div>
+
+        <div className="mt-3 border-t border-slate-100 pt-3">
+          <MetaAnunciosAdmin propiedadId={params.id} anunciosIniciales={metaAnuncios} />
         </div>
       </div>
 
