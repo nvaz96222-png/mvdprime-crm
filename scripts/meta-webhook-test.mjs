@@ -61,6 +61,7 @@ async function post(nombre, body, { firmaOk = true, esperado = 200 } = {}) {
 // --- payloads ---
 const WA = "59899000777";
 const IG = "17841400000000999";
+const PSID = "61550000000000777";
 
 const waMsg = (id, text, extra = {}) => ({
   object: "whatsapp_business_account",
@@ -131,6 +132,16 @@ async function main() {
     entry: [{ id: "IGPAGE", messaging: [{
       sender: { id: IG }, recipient: { id: "IGBIZ" }, timestamp: 1700000300,
       message: { mid: "ig.MID1", text: "Hola, info del depto?" },
+    }] }],
+  });
+
+  // 8b. DM de Messenger (mensaje de la página de Facebook, desde un anuncio CTM)
+  await post("Messenger DM (desde anuncio)", {
+    object: "page",
+    entry: [{ id: "PAGEID", messaging: [{
+      sender: { id: PSID }, recipient: { id: "PAGEID" }, timestamp: 1700000400,
+      message: { mid: "m.MID1", text: "Hola, vi el aviso en Facebook" },
+      referral: { ref: "ad", ad_id: "AD_TEST_1", source: "ADS", type: "OPEN_THREAD" },
     }] }],
   });
 

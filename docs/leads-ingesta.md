@@ -148,6 +148,10 @@ Integración directa con Meta vía webhook propio. Setup completo en
   como salientes (`autor=app`). Los `statuses` actualizan `mensajes.estado`.
 - **Instagram:** DMs → contacto por `instagram_id` (sin teléfono), `origen=instagram`
   (o `meta_ads` con referral). Ecos (`is_echo`) como salientes.
+- **Messenger** (mensajes de la página de Facebook, `object=page`,
+  `entry[].messaging[]`): DMs → contacto por `messenger_id` (PSID, sin teléfono),
+  `origen=messenger` (o `meta_ads` con referral de Click-to-Messenger). Ecos
+  (`is_echo`) como salientes. Es el canal de los anuncios "Mensajes" de reels de FB.
 - **Lead Ads:** `leadgen` → se lee el lead con la Graph API
   (`META_PAGE_ACCESS_TOKEN`), se mapea `field_data` y entra como `meta_ads` con
   `meta_lead_id` (UNIQUE → idempotencia si Meta reintenta).
