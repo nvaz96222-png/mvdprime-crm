@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
@@ -12,6 +12,7 @@ const NAV_TODOS = [
   { href: "/proyectos",  label: "Proyectos",    icon: IconProyectos },
   { href: "/tasaciones", label: "Tasaciones",   icon: IconTasaciones },
   { href: "/leads",      label: "Leads",        icon: IconPipeline },
+  { href: "/chats",      label: "Chats",        icon: IconChats, badge: "chats" },
   { href: "/contactos",  label: "Contactos",    icon: IconUsers },
   { href: "/calendario", label: "Calendario",   icon: IconCalendar },
 ];
@@ -23,9 +24,10 @@ const NAV_ADMIN = [
 export default function Sidebar({ usuario }) {
   const pathname = usePathname();
   const router = useRouter();
-  const supabase = createClient();
+  const [supabase] = useState(() => createClient());
   const [abierto, setAbierto] = useState(false);
   const [saliendo, setSaliendo] = useState(false);
+  const chatsSinLeer = useChatsSinLeer(supabase);
 
   async function handleLogout() {
     setSaliendo(true);
@@ -49,8 +51,11 @@ export default function Sidebar({ usuario }) {
         <button
           onClick={() => setAbierto((v) => !v)}
           aria-label="Abrir menú"
-          className="rounded-md p-2 hover:bg-navy-light"
+          className="relative rounded-md p-2 hover:bg-navy-light"
         >
+          {chatsSinLeer > 0 && (
+            <span className="absolute right-1 top-1 h-2.5 w-2.5 rounded-full bg-[#25d366] ring-2 ring-navy" aria-label="Chats sin leer" />
+          )}
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <line x1="3" y1="6" x2="21" y2="6" />
             <line x1="3" y1="12" x2="21" y2="12" />
@@ -89,7 +94,7 @@ export default function Sidebar({ usuario }) {
         {/* Navegación */}
         <nav className="flex-1 px-3 py-2">
           <div className="space-y-1">
-            {NAV_TODOS.map((item) => <NavLink key={item.href} item={item} pathname={pathname} onClick={() => setAbierto(false)} />)}
+            {NAV_TODOS.map((item) => <NavLink key={item.href} item={item} pathname={pathname} onClick={() => setAbierto(false)} badge={item.badge === "chats" ? chatsSinLeer : 0} />)}
           </div>
           {usuario?.rol === "admin" && (
             <>
@@ -138,7 +143,38 @@ export default function Sidebar({ usuario }) {
   );
 }
 
-function NavLink({ item, pathname, onClick }) {
+// Cantidad de conversaciones con mensajes sin leer (visibles para el usuario
+// según el RLS). Se recalcula con Realtime cuando cambia una conversación.
+function useChatsSinLeer(supabase) {
+  const [cantidad, setCantidad] = useState(0);
+  useEffect(() => {
+    let activo = true;
+    let timer = null;
+    async function contar() {
+      const { count, error } = await supabase
+        .from("conversaciones")
+        .select("id", { count: "exact", head: true })
+        .gt("no_leidos", 0);
+      if (activo && !error) setCantidad(count || 0);
+    }
+    contar();
+    const canal = supabase
+      .channel("sidebar-chats")
+      .on("postgres_changes", { event: "*", schema: "public", table: "conversaciones" }, () => {
+        clearTimeout(timer);
+        timer = setTimeout(contar, 400);
+      })
+      .subscribe();
+    return () => {
+      activo = false;
+      clearTimeout(timer);
+      supabase.removeChannel(canal);
+    };
+  }, [supabase]);
+  return cantidad;
+}
+
+function NavLink({ item, pathname, onClick, badge = 0 }) {
   const activo = pathname === item.href || pathname.startsWith(item.href + "/");
   const Icon = item.icon;
   return (
@@ -153,11 +189,23 @@ function NavLink({ item, pathname, onClick }) {
     >
       <Icon />
       {item.label}
+      {badge > 0 && (
+        <span className="ml-auto flex h-5 min-w-5 items-center justify-center rounded-full bg-[#25d366] px-1.5 text-[11px] font-semibold text-white">
+          {badge > 99 ? "99+" : badge}
+        </span>
+      )}
     </Link>
   );
 }
 
 /* --- Íconos (SVG inline, sin dependencias) --- */
+function IconChats() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 9 9 0 0 1-4-.9L3 20l1.1-4.2A8.2 8.2 0 0 1 3 11.5 8.5 8.5 0 0 1 12 3a8.4 8.4 0 0 1 9 8.5z" />
+    </svg>
+  );
+}
 function IconDashboard() {
   return (
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">

@@ -4,6 +4,8 @@ module.exports = {
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
+    // Clases de color definidas como datos (p. ej. LEAD_ETAPAS en lib/constants.js).
+    "./lib/**/*.{js,ts}",
   ],
   theme: {
     extend: {
