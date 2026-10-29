@@ -14,7 +14,7 @@ const RAPIDOS = [
 // Columna izquierda: búsqueda, filtros y lista de conversaciones (estilo WhatsApp).
 export default function ListaConversaciones({
   conversaciones, totalSinFiltro, seleccionId, onSeleccionar,
-  filtros, setFiltros, propiedades, propiedadesMap,
+  filtros, setFiltros, propiedades, propiedadesMap, ia = {},
 }) {
   const hayFiltrosAvanzados = filtros.canal || filtros.etapa || filtros.propiedad;
   const set = (campo) => (e) => setFiltros((f) => ({ ...f, [campo]: e.target.value }));
@@ -39,7 +39,7 @@ export default function ListaConversaciones({
         </label>
 
         <div className="flex flex-wrap gap-1.5">
-          {RAPIDOS.map((r) => (
+          {[...RAPIDOS, ...(ia.disponible ? [{ value: "atender", label: "Para atender" }] : [])].map((r) => (
             <button
               key={r.value}
               type="button"
@@ -107,6 +107,7 @@ function Fila({ conv, activa, onClick, propiedadesMap }) {
   const propiedad = conv.lead?.propiedad_id ? propiedadesMap[conv.lead.propiedad_id] : null;
   const sinLeer = conv.no_leidos > 0;
   const cerrada = !ventanaAbierta(conv);
+  const atender = !!conv.ia_derivada;
 
   return (
     <li>
@@ -143,8 +144,10 @@ function Fila({ conv, activa, onClick, propiedadesMap }) {
               </span>
             )}
           </div>
-          {(etapa || propiedad || cerrada) && (
+          {(etapa || propiedad || cerrada || atender || conv.ia_activa) && (
             <div className="mt-1 flex items-center gap-1.5 overflow-hidden text-[10px]">
+              {atender && <span className="shrink-0 rounded bg-red-50 px-1.5 py-0.5 font-semibold text-red-700" title={conv.ia_motivo_derivacion || ""}>Atender</span>}
+              {conv.ia_activa && !atender && <span className="shrink-0 rounded bg-violet-50 px-1.5 py-0.5 text-violet-700">IA</span>}
               {etapa && (
                 <span className="flex shrink-0 items-center gap-1 rounded bg-slate-100 px-1.5 py-0.5 text-slate-600">
                   <span className={`h-1.5 w-1.5 rounded-full ${etapa.color}`} />{etapa.label}

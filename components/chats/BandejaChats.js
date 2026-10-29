@@ -38,7 +38,7 @@ function interesesDe(conv) {
 
 export default function BandejaChats({
   conversacionesIniciales = [], propiedades = [], usuarios = [], perfil,
-  siteUrl, inicial = {}, api: apiInyectada,
+  siteUrl, inicial = {}, api: apiInyectada, ia = { disponible: false, activaGlobal: false },
 }) {
   const api = useMemo(() => apiInyectada || crearApiChats(createClient()), [apiInyectada]);
   const [convs, setConvs] = useState(() => ordenar(conversacionesIniciales));
@@ -64,6 +64,7 @@ export default function BandejaChats({
     return convs.filter((c) => {
       if (filtros.rapido === "sin_leer" && !(c.no_leidos > 0)) return false;
       if (filtros.rapido === "mios" && c.asignado_a !== perfil?.id && c.lead?.agente_id !== perfil?.id) return false;
+      if (filtros.rapido === "atender" && !c.ia_derivada) return false;
       if (filtros.canal && c.canal !== filtros.canal) return false;
       if (filtros.etapa && c.lead?.etapa !== filtros.etapa) return false;
       if (filtros.propiedad && !interesesDe(c).includes(filtros.propiedad)) return false;
@@ -86,9 +87,12 @@ export default function BandejaChats({
     try {
       const { mensajes, hayMas } = await api.cargarMensajes(id, antesDe);
       setHilo(id, (h) => {
-        const existentes = new Set(h.mensajes.map((m) => m.id));
-        const nuevos = mensajes.filter((m) => !existentes.has(m.id));
-        return { mensajes: antesDe ? [...nuevos, ...h.mensajes] : [...h.mensajes.filter((m) => m.id.startsWith?.("tmp-")), ...nuevos].sort((a, b) => Date.parse(a.created_at) - Date.parse(b.created_at)), hayMas, cargando: false };
+        // Combinar (nunca reemplazar): si la carga corre dos veces o llegó algo
+        // por Realtime mientras tanto, no se pierde nada ni se duplica.
+        const porId = new Map(h.mensajes.map((m) => [m.id, m]));
+        for (const m of mensajes) porId.set(m.id, { ...porId.get(m.id), ...m });
+        const todos = [...porId.values()].sort((a, b) => Date.parse(a.created_at) - Date.parse(b.created_at));
+        return { mensajes: todos, hayMas: antesDe ? hayMas : (h.hayMas && h.mensajes.length > 0 ? h.hayMas : hayMas), cargando: false };
       });
     } catch (e) {
       setHilo(id, (h) => ({ ...h, cargando: false, error: "No se pudieron cargar los mensajes." }));
@@ -264,6 +268,21 @@ export default function BandejaChats({
     }
   }
 
+  // ── Agente IA ─────────────────────────────────────────────────────
+  async function cambiarIA(activa) {
+    if (!conv) return;
+    const convId = conv.id;
+    const antes = { ia_activa: conv.ia_activa, ia_derivada: conv.ia_derivada, ia_pausada_hasta: conv.ia_pausada_hasta };
+    const optimista = activa ? { ia_activa: true, ia_derivada: false, ia_pausada_hasta: null } : { ia_activa: false };
+    setConvs((cs) => cs.map((c) => (c.id === convId ? { ...c, ...optimista } : c)));
+    try {
+      await api.cambiarIA(convId, activa);
+    } catch (e) {
+      setConvs((cs) => cs.map((c) => (c.id === convId ? { ...c, ...antes } : c)));
+      setAviso(e?.message || "No se pudo cambiar la IA.");
+    }
+  }
+
   // ── Ficha ─────────────────────────────────────────────────────────
   function elegirFicha(p) {
     setModalFicha(false);
@@ -298,6 +317,7 @@ export default function BandejaChats({
           setFiltros={setFiltros}
           propiedades={propiedades}
           propiedadesMap={propiedadesMap}
+          ia={ia}
         />
       </div>
 
@@ -315,6 +335,8 @@ export default function BandejaChats({
             onCargarAnteriores={() => cargarHilo(conv.id, hilos[conv.id]?.mensajes.find((m) => !m.id.startsWith?.("tmp-"))?.created_at)}
             onTogglePanel={() => setPanelAbierto((v) => !v)}
             onAbrirFicha={() => setModalFicha(true)}
+            ia={ia}
+            onCambiarIA={cambiarIA}
             borrador={borradores[conv.id] || ""}
             setBorrador={(v) => setBorradores((b) => ({ ...b, [conv.id]: v }))}
           />
