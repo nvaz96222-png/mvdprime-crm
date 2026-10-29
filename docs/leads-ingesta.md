@@ -33,7 +33,10 @@ Pasos (cada uno con su registro de trazabilidad):
    ANTES de validar. Si todo lo demás explota, el lead es recuperable.
 2. **Validación** — nombre y teléfono requeridos (salvo `permitirSinTelefono`,
    ej. preguntas ML que no traen teléfono). Falla → log `invalido`.
-3. **Contacto** — dedupe por teléfono (sin espacios), fallback por email.
+3. **Contacto** — dedupe por teléfono **normalizado** (`099 123 456` = `59899123456`,
+   ver [lib/telefono.js](../lib/telefono.js) y la columna generada
+   `contactos.telefono_norm`), fallback por email. Si hay varios contactos con
+   el mismo número, se usa el más antiguo.
    Si no existe, se crea. Reintento automático x1 ante error transitorio.
 4. **Lead** — `etapa=nuevo`, con origen validado contra la lista de la DB,
    notas con mensaje + UTM (campaña/medio/anuncio/referrer) + canal.
@@ -193,6 +196,17 @@ si no el middleware la bloquea con 401/redirect.**
 4. Probar con curl y verificar la fila en `lead_ingesta_log`.
 
 ## Historial de incidentes
+
+**2026-10-29 — Contactos duplicados entre la web y WhatsApp (resuelto).**
+Los teléfonos se comparaban como texto: la web y la carga manual guardan
+`099123456` y WhatsApp manda `59899123456`. Un cliente existente que escribía
+por WhatsApp quedaba duplicado (contacto + lead nuevos) y los mensajes enviados
+desde la app del celular no encontraban al contacto. Fix: `normalizarTelefono()`
+en [lib/telefono.js](../lib/telefono.js) + columna generada `telefono_norm`
+(migración `20261029_telefono_normalizado.sql`, no modifica los teléfonos
+guardados). Los duplicados que ya se hubieran creado no se fusionan solos:
+la SECCIÓN 0 de esa migración los lista para unificarlos a mano.
+Prueba: `node scripts/telefono-test.mjs`.
 
 **2026-07-07 — Pérdida total de leads web (resuelto).** Dos bugs independientes:
 
