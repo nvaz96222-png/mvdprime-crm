@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { firmaValida } from "@/lib/meta/firma";
 import { procesarEvento } from "@/lib/meta/procesador";
+import { waitUntil } from "@vercel/functions";
+import { procesarConversacionIA } from "@/lib/ia/agente";
 
 // =====================================================================
 // Webhook de Meta — WhatsApp / Instagram / Lead Ads.
@@ -18,6 +20,9 @@ import { procesarEvento } from "@/lib/meta/procesador";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
+// El agente IA corre en segundo plano (waitUntil) después de responder 200;
+// necesita margen para esperar mensajes seguidos + llamar a Claude + enviar.
+export const maxDuration = 60;
 
 // GET — handshake de verificación de Meta.
 export async function GET(request) {
@@ -50,11 +55,24 @@ export async function POST(request) {
     return NextResponse.json({ ok: true, ignorado: "json_invalido" });
   }
 
+  const paraIA = new Set();
+  let supabase = null;
   try {
-    const supabase = createAdminClient();
-    await procesarEvento(supabase, body);
+    supabase = createAdminClient();
+    await procesarEvento(supabase, body, {
+      alMensajeEntrante: (conversacionId) => paraIA.add(conversacionId),
+    });
   } catch (err) {
     console.error("[meta/webhook]", err?.message || err);
+  }
+
+  // 3. Agente IA (Fase 3) en segundo plano: Meta ya recibe su 200. El agente
+  //    decide solo si le corresponde responder (interruptores, pausas, horario).
+  if (supabase && paraIA.size) {
+    waitUntil(
+      Promise.allSettled([...paraIA].map((id) => procesarConversacionIA(supabase, id)))
+        .then((rs) => rs.forEach((r) => r.status === "rejected" && console.error("[meta/webhook] IA:", r.reason)))
+    );
   }
 
   return NextResponse.json({ ok: true });

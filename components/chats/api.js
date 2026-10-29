@@ -17,6 +17,11 @@ export const SELECT_CONVERSACION =
   "lead:leads(id, etapa, prioridad, origen, propiedad_id, agente_id, meta_ad_id, meta_campaign, created_at, " +
   "intereses:lead_propiedades(propiedad_id))";
 
+// Con la migración de la Fase 3 (agente IA) se suman estos campos. Si todavía
+// no corrió, se cae al SELECT base para que la bandeja siga funcionando.
+export const SELECT_CONVERSACION_IA =
+  SELECT_CONVERSACION + ", ia_derivada, ia_motivo_derivacion, ia_pausada_hasta";
+
 const POR_PAGINA = 60;
 
 async function postJSON(url, body, method = "POST") {
@@ -53,8 +58,14 @@ export function crearApiChats(supabase) {
 
     /** Una conversación con sus datos de contacto y lead (para altas por Realtime). */
     async cargarConversacion(id) {
+      const conIA = await supabase.from("conversaciones").select(SELECT_CONVERSACION_IA).eq("id", id).maybeSingle();
+      if (!conIA.error) return conIA.data || null;
       const { data } = await supabase.from("conversaciones").select(SELECT_CONVERSACION).eq("id", id).maybeSingle();
       return data || null;
+    },
+
+    cambiarIA(conversacionId, activa) {
+      return postJSON(`/api/chats/${conversacionId}/ia`, { activa });
     },
 
     enviar(conversacionId, texto) {

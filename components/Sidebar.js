@@ -19,6 +19,7 @@ const NAV_TODOS = [
 
 const NAV_ADMIN = [
   { href: "/equipo", label: "Equipo", icon: IconTeam },
+  { href: "/configuracion/agente-ia", label: "Agente IA", icon: IconAgenteIA },
 ];
 
 export default function Sidebar({ usuario }) {
@@ -199,6 +200,17 @@ function NavLink({ item, pathname, onClick, badge = 0 }) {
 }
 
 /* --- Íconos (SVG inline, sin dependencias) --- */
+function IconAgenteIA() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <rect x="4" y="7" width="16" height="12" rx="3" />
+      <line x1="12" y1="3" x2="12" y2="7" />
+      <circle cx="9" cy="13" r="1" />
+      <circle cx="15" cy="13" r="1" />
+      <line x1="9" y1="16.5" x2="15" y2="16.5" />
+    </svg>
+  );
+}
 function IconChats() {
   return (
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">

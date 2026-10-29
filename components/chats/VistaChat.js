@@ -15,7 +15,7 @@ const TIPO_LABEL = {
 export default function VistaChat({
   conv, estado, perfil, usuariosMap, propiedadesMap,
   onVolver, onEnviar, onReintentar, onCargarAnteriores, onTogglePanel, onAbrirFicha,
-  borrador, setBorrador,
+  borrador, setBorrador, ia = {}, onCambiarIA,
 }) {
   const scrollRef = useRef(null);
   const pegadoAbajo = useRef(true);
@@ -83,11 +83,48 @@ export default function VistaChat({
             <IconTelefono size={20} />
           </a>
         )}
+        {ia.disponible && (
+          <button
+            type="button"
+            onClick={() => onCambiarIA?.(!conv.ia_activa)}
+            aria-pressed={!!conv.ia_activa}
+            title={
+              !ia.activaGlobal
+                ? "El agente IA está apagado en la configuración general"
+                : conv.ia_activa ? "Apagar el agente IA en este chat" : "Prender el agente IA en este chat"
+            }
+            className={`shrink-0 rounded-full px-2.5 py-1 text-[11px] font-semibold transition ${
+              conv.ia_activa
+                ? ia.activaGlobal ? "bg-violet-100 text-violet-800 hover:bg-violet-200" : "bg-slate-200 text-slate-500"
+                : "bg-white text-slate-500 ring-1 ring-slate-300 hover:bg-slate-100"
+            }`}
+          >
+            {conv.ia_activa ? "IA activa" : "IA apagada"}
+          </button>
+        )}
         <button type="button" onClick={onTogglePanel} aria-label="Ver ficha del lead" title="Ficha del lead"
           className="rounded-full p-2 text-slate-600 hover:bg-slate-200">
           <IconFicha size={20} />
         </button>
       </header>
+
+      {conv.ia_derivada && (
+        <div className="flex items-start gap-2 border-b border-red-200 bg-red-50 px-4 py-2 text-[13px] text-red-800">
+          <span className="font-semibold">El agente IA te pasó esta conversación.</span>
+          {conv.ia_motivo_derivacion && <span className="flex-1 text-red-700">{conv.ia_motivo_derivacion}</span>}
+          {conv.ia_activa && (
+            <button type="button" onClick={() => onCambiarIA?.(true)} className="ml-auto shrink-0 text-[12px] font-semibold underline">
+              Devolvérsela a la IA
+            </button>
+          )}
+        </div>
+      )}
+      {!conv.ia_derivada && conv.ia_activa && conv.ia_pausada_hasta && Date.parse(conv.ia_pausada_hasta) > Date.now() && (
+        <div className="flex items-center gap-2 border-b border-violet-200 bg-violet-50 px-4 py-1.5 text-[12px] text-violet-800">
+          <span className="flex-1">La IA está en pausa porque respondió una persona; vuelve sola en unas horas.</span>
+          <button type="button" onClick={() => onCambiarIA?.(true)} className="shrink-0 font-semibold underline">Reactivar ahora</button>
+        </div>
+      )}
 
       {/* Mensajes */}
       <div ref={scrollRef} onScroll={onScroll}
