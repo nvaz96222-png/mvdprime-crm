@@ -334,5 +334,187 @@
     ]
    }
   }
- ]
+ ],
+ "fichas": {
+  "01": [
+   {
+    "titulo": "Planta baja",
+    "imagen": "/desarrollos/jardines-del-polo/casas/01-planta-baja.webp"
+   },
+   {
+    "titulo": "Planta alta",
+    "imagen": "/desarrollos/jardines-del-polo/casas/01-planta-alta.webp"
+   }
+  ],
+  "02": [
+   {
+    "titulo": "Planta baja",
+    "imagen": "/desarrollos/jardines-del-polo/casas/02-planta-baja.webp"
+   },
+   {
+    "titulo": "Planta alta",
+    "imagen": "/desarrollos/jardines-del-polo/casas/02-planta-alta.webp"
+   }
+  ],
+  "03": [
+   {
+    "titulo": "Planta baja",
+    "imagen": "/desarrollos/jardines-del-polo/casas/03-planta-baja.webp"
+   },
+   {
+    "titulo": "Planta alta",
+    "imagen": "/desarrollos/jardines-del-polo/casas/03-planta-alta.webp"
+   }
+  ],
+  "04": [
+   {
+    "titulo": "Planta baja",
+    "imagen": "/desarrollos/jardines-del-polo/casas/04-planta-baja.webp"
+   },
+   {
+    "titulo": "Planta alta",
+    "imagen": "/desarrollos/jardines-del-polo/casas/04-planta-alta.webp"
+   }
+  ],
+  "05": [
+   {
+    "titulo": "Planta baja",
+    "imagen": "/desarrollos/jardines-del-polo/casas/05-planta-baja.webp"
+   },
+   {
+    "titulo": "Planta alta",
+    "imagen": "/desarrollos/jardines-del-polo/casas/05-planta-alta.webp"
+   }
+  ],
+  "06": [
+   {
+    "titulo": "Planta baja",
+    "imagen": "/desarrollos/jardines-del-polo/casas/06-planta-baja.webp"
+   },
+   {
+    "titulo": "Planta alta",
+    "imagen": "/desarrollos/jardines-del-polo/casas/06-planta-alta.webp"
+   }
+  ],
+  "07": [
+   {
+    "titulo": "Planta baja",
+    "imagen": "/desarrollos/jardines-del-polo/casas/07-planta-baja.webp"
+   },
+   {
+    "titulo": "Planta alta",
+    "imagen": "/desarrollos/jardines-del-polo/casas/07-planta-alta.webp"
+   }
+  ],
+  "08": [
+   {
+    "titulo": "Planta baja",
+    "imagen": "/desarrollos/jardines-del-polo/casas/08-planta-baja.webp"
+   },
+   {
+    "titulo": "Planta alta",
+    "imagen": "/desarrollos/jardines-del-polo/casas/08-planta-alta.webp"
+   }
+  ],
+  "09": [
+   {
+    "titulo": "Planta baja",
+    "imagen": "/desarrollos/jardines-del-polo/casas/09-planta-baja.webp"
+   },
+   {
+    "titulo": "Planta alta",
+    "imagen": "/desarrollos/jardines-del-polo/casas/09-planta-alta.webp"
+   }
+  ],
+  "10": [
+   {
+    "titulo": "Planta baja",
+    "imagen": "/desarrollos/jardines-del-polo/casas/10-planta-baja.webp"
+   },
+   {
+    "titulo": "Planta alta",
+    "imagen": "/desarrollos/jardines-del-polo/casas/10-planta-alta.webp"
+   }
+  ],
+  "11": [
+   {
+    "titulo": "Planta baja",
+    "imagen": "/desarrollos/jardines-del-polo/casas/11-planta-baja.webp"
+   },
+   {
+    "titulo": "Planta alta",
+    "imagen": "/desarrollos/jardines-del-polo/casas/11-planta-alta.webp"
+   }
+  ],
+  "12": [
+   {
+    "titulo": "Planta baja",
+    "imagen": "/desarrollos/jardines-del-polo/casas/12-planta-baja.webp"
+   },
+   {
+    "titulo": "Planta alta",
+    "imagen": "/desarrollos/jardines-del-polo/casas/12-planta-alta.webp"
+   }
+  ],
+  "13": [
+   {
+    "titulo": "Planta baja",
+    "imagen": "/desarrollos/jardines-del-polo/casas/13-planta-baja.webp"
+   },
+   {
+    "titulo": "Planta alta",
+    "imagen": "/desarrollos/jardines-del-polo/casas/13-planta-alta.webp"
+   }
+  ],
+  "14": [
+   {
+    "titulo": "Planta baja",
+    "imagen": "/desarrollos/jardines-del-polo/casas/14-planta-baja.webp"
+   },
+   {
+    "titulo": "Planta alta",
+    "imagen": "/desarrollos/jardines-del-polo/casas/14-planta-alta.webp"
+   }
+  ],
+  "15": [
+   {
+    "titulo": "Planta baja",
+    "imagen": "/desarrollos/jardines-del-polo/casas/15-planta-baja.webp"
+   },
+   {
+    "titulo": "Planta alta",
+    "imagen": "/desarrollos/jardines-del-polo/casas/15-planta-alta.webp"
+   }
+  ],
+  "16": [
+   {
+    "titulo": "Planta baja",
+    "imagen": "/desarrollos/jardines-del-polo/casas/16-planta-baja.webp"
+   },
+   {
+    "titulo": "Planta alta",
+    "imagen": "/desarrollos/jardines-del-polo/casas/16-planta-alta.webp"
+   }
+  ],
+  "17": [
+   {
+    "titulo": "Planta baja",
+    "imagen": "/desarrollos/jardines-del-polo/casas/17-planta-baja.webp"
+   },
+   {
+    "titulo": "Planta alta",
+    "imagen": "/desarrollos/jardines-del-polo/casas/17-planta-alta.webp"
+   }
+  ],
+  "18": [
+   {
+    "titulo": "Planta baja",
+    "imagen": "/desarrollos/jardines-del-polo/casas/18-planta-baja.webp"
+   },
+   {
+    "titulo": "Planta alta",
+    "imagen": "/desarrollos/jardines-del-polo/casas/18-planta-alta.webp"
+   }
+  ]
+ }
 }

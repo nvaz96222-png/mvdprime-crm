@@ -18,13 +18,27 @@ resuelve.
 | Área de parcela y metros construidos | la misma planilla |
 | Desglose por ambiente, dormitorios | brochure, páginas "CASAS TIPO A / B / C" |
 | Masterplan y polígonos | brochure, página 5 |
+| Plantas de cada casa | brochure, páginas 15 a 52 (dos por casa) |
 | Contraste de precio y estado | `LISTA JARDINES DEL POLO #3.pdf` |
 
-Las dos listas —la planilla y el PDF oficial— se cruzan casa por casa.
-**Hoy coinciden en todo**, así que no hay ninguna unidad con el estado en
-disputa, a diferencia de City Homes. Si alguna vez difieren, la diferencia
-queda en `discrepancias` y como observación en la unidad; vale la planilla,
-que es la más reciente.
+Las dos listas —la planilla y el PDF oficial— se cruzan casa por casa y **hoy
+coinciden en todo**: ninguna unidad con el estado en disputa, a diferencia de
+City Homes.
+
+Donde sí hay diferencia es en la parcela, contra una tercera fuente: **el
+metraje que imprime la planta de cada casa en el brochure**. Coincide en 16 de
+18, pero no en estas dos:
+
+| Casa | Lista de precios | Planta del brochure |
+|---|---|---|
+| 01 | 303 m² | 313 m² |
+| 02 | 357 m² | 351 m² |
+
+Se publica el de la lista, que es el documento comercial, y la casa queda con
+una observación que dice las dos cifras. **No se elige en silencio.** Vale la
+pena preguntarle a Pires Benlian cuál de las dos vale: son las dos casas del
+mismo bloque, así que puede ser una revisión de amojonamiento que entró en un
+documento y no en el otro.
 
 ## Las tres verificaciones
 
@@ -60,18 +74,29 @@ El masterplan y `plantas.json` se copian a mano a los dos repos:
 ```
 salida/masterplan.webp  →  public/desarrollos/jardines-del-polo/masterplan.webp   (CRM)
                         →  ../web-nico/public/desarrollos/jardines-del-polo/…
+salida/casas/*.webp     →  public/desarrollos/jardines-del-polo/casas/            (CRM)
+                        →  ../web-nico/public/desarrollos/jardines-del-polo/casas/
 salida/plantas.json     →  lib/desarrollos/jardines-del-polo/plantas.json         (CRM)
                         →  ../web-nico/lib/selector/jardines-del-polo.json
 ```
 
+`plantas.json` lleva los polígonos **y** la lista de plantas de cada casa
+(`fichas`), porque las dos cosas son material del proyecto y no dato comercial.
 Precio y estado **no** se copian: viven en Supabase y se editan en el CRM.
+
+Si cambia algo descriptivo —una superficie, una observación nueva— se vuelca a
+la base sin tocar lo comercial:
+
+```bash
+node scripts/cargar-unidades.js jardines-del-polo --aplicar --sincronizar-fichas
+```
 
 ## Lo que falta
 
 - **Baños por tipo.** Ni la lista ni las páginas de tipo los dicen. La ficha
   muestra "A confirmar" en vez de inventar un número.
-- **Planos de cada casa.** El brochure trae planta baja y planta alta de las 18
-  (páginas 15 a 52). Serían un buen agregado a la ficha, como imagen por
-  unidad; hoy la ficha muestra el recorte del masterplan.
+- **La parcela de las casas 01 y 02**, que arriba queda explicada. Cuando el
+  desarrollador confirme, se corrige en la planilla y se vuelve a correr el
+  generador.
 - **Fecha de la lista oficial en PDF.** El archivo se llama "#3" y no trae
   fecha adentro. Se usa sólo para contrastar, así que no bloquea nada.

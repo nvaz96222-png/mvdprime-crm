@@ -21,9 +21,15 @@
  *       → inserta las que falten
  *   node scripts/cargar-unidades.js jardines-del-polo --aplicar --pisar-precios
  *       → además pisa precio y estado de las que ya existen
+ *   node scripts/cargar-unidades.js jardines-del-polo --aplicar --sincronizar-fichas
+ *       → reescribe lo descriptivo (tipología, superficies, desglose,
+ *         observaciones, trazabilidad) sin tocar precio ni estado
  *
  * Sin --pisar-precios una unidad que ya está en la base no se toca: lo que
  * editó una persona en el CRM vale más que una relectura del mismo documento.
+ * Lo descriptivo es otra cosa: nadie lo edita a mano, sale del documento, y
+ * cuando aparece un dato nuevo —otra fuente, una superficie corregida— hay que
+ * poder volcarlo sin recargar todo.
  *
  * City Homes se cargó antes de que existiera este script, con
  * scripts/city-homes-unidades.js; aquel lee el formato del selector original.
@@ -43,6 +49,7 @@ const RAIZ = path.resolve(__dirname, "..");
 const slug = process.argv[2];
 const aplicar = process.argv.includes("--aplicar");
 const pisarPrecios = process.argv.includes("--pisar-precios");
+const sincronizarFichas = process.argv.includes("--sincronizar-fichas");
 
 if (!slug || slug.startsWith("--")) {
   console.error("Uso: node scripts/cargar-unidades.js <slug> [--aplicar] [--pisar-precios]");
@@ -104,9 +111,18 @@ function filaUnidad(u, proyectoId) {
   };
 }
 
-// Lo que una relectura del documento puede pisar. El resto (código, etiqueta,
-// plano, zona, fuentes) no cambia entre lecturas del mismo listado.
+// Lo comercial: lo único que se edita a mano en el CRM, y lo único que
+// --pisar-precios se anima a reescribir.
 const CAMPOS_COMERCIALES = ["precio", "estado", "observaciones"];
+
+// Lo descriptivo: sale del documento y nadie lo toca desde la app, así que
+// --sincronizar-fichas lo reescribe sin preguntar.
+const CAMPOS_DESCRIPTIVOS = [
+  "etiqueta", "tipologia", "dormitorios", "banos", "piso", "nivel",
+  "sup_habitable", "sup_terrazas", "sup_subtotal", "sup_comunes", "sup_total",
+  "sup_parcela", "desglose", "observaciones", "plano", "zona",
+  "fuente_precio", "fuente_superficies", "fuente_plano", "historico",
+];
 
 // ─── Main ───────────────────────────────────────────────────────────────────
 
@@ -204,6 +220,19 @@ const CAMPOS_COMERCIALES = ["precio", "estado", "observaciones"];
       }
     }
     console.log(`✔  ${difieren.length} unidades actualizadas desde el documento.`);
+  }
+
+  if (sincronizarFichas && yaEstaban.length > 0) {
+    for (const f of yaEstaban) {
+      const e = porClave.get(clave(f));
+      const cambios = Object.fromEntries(CAMPOS_DESCRIPTIVOS.map((c) => [c, f[c]]));
+      const { error } = await supabase.from("proyecto_unidades").update(cambios).eq("id", e.id);
+      if (error) {
+        console.error(`❌  Error sincronizando ${f.etiqueta}:`, error.message);
+        process.exit(1);
+      }
+    }
+    console.log(`✔  ${yaEstaban.length} fichas sincronizadas con el documento (sin tocar precio ni estado).`);
   }
 
   // ── Condiciones comerciales del proyecto (sólo si están vacías) ──────────

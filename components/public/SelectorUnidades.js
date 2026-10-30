@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 // Selector visual de unidades sobre las plantas del proyecto.
 // Los polígonos vienen en coordenadas normalizadas (0..1) sobre la imagen
@@ -150,7 +150,17 @@ export default function SelectorUnidades({ datos, plantas, proyectoNombre }) {
   const [sel, setSel] = useState(null);
   const [globo, setGlobo] = useState(null);
   const [filtros, setFiltros] = useState({ tipologias: [], estados: [], precioMax: null });
+  // Planta abierta en grande. Las del brochure se leen recién a tamaño
+  // completo: en el ancho de la ficha no se distinguen los ambientes.
+  const [lupa, setLupa] = useState(null);
   const lienzo = useRef(null);
+
+  useEffect(() => {
+    if (!lupa) return;
+    const cerrar = (e) => e.key === "Escape" && setLupa(null);
+    window.addEventListener("keydown", cerrar);
+    return () => window.removeEventListener("keydown", cerrar);
+  }, [lupa]);
 
   const hayFiltros =
     filtros.tipologias.length || filtros.estados.length || filtros.precioMax != null;
@@ -551,6 +561,29 @@ export default function SelectorUnidades({ datos, plantas, proyectoNombre }) {
                 </div>
               )}
 
+              {sel.imagenes?.length > 0 && (
+                <div className="grid grid-cols-2 gap-px border-y border-slate-100 bg-slate-100">
+                  {sel.imagenes.map((im) => (
+                    <button
+                      key={im.imagen}
+                      type="button"
+                      onClick={() => setLupa({ ...im, unidad: sel.etiqueta })}
+                      className="group bg-white p-2 text-left transition hover:bg-slate-50"
+                    >
+                      <img
+                        src={im.imagen}
+                        alt={`${im.titulo} de la ${sel.etiqueta}`}
+                        loading="lazy"
+                        className="block h-24 w-full rounded object-cover object-top"
+                      />
+                      <span className="mt-1 block text-[11px] font-medium text-slate-500 group-hover:text-accent">
+                        {im.titulo} ↗
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              )}
+
               <dl className="grid grid-cols-2 gap-px bg-slate-100 text-sm">
                 <Dato
                   k="Dormitorios"
@@ -592,6 +625,34 @@ export default function SelectorUnidades({ datos, plantas, proyectoNombre }) {
           )}
         </aside>
       </div>
+
+      {/* Planta en grande */}
+      {lupa && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label={`${lupa.titulo} de la ${lupa.unidad}`}
+          onClick={() => setLupa(null)}
+          className="fixed inset-0 z-50 flex flex-col items-center justify-center gap-3 bg-navy/85 p-4"
+        >
+          <img
+            src={lupa.imagen}
+            alt={`${lupa.titulo} de la ${lupa.unidad}`}
+            onClick={(e) => e.stopPropagation()}
+            className="max-h-[82vh] w-auto max-w-full rounded-lg bg-white shadow-2xl"
+          />
+          <p className="text-sm text-white/90">
+            {lupa.unidad} · {lupa.titulo}
+          </p>
+          <button
+            type="button"
+            onClick={() => setLupa(null)}
+            className="absolute right-4 top-4 rounded-full bg-white/15 px-3 py-1.5 text-sm text-white backdrop-blur transition hover:bg-white/25"
+          >
+            Cerrar
+          </button>
+        </div>
+      )}
     </section>
   );
 }

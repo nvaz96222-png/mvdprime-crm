@@ -10,4 +10,5 @@
 # para mirar, no para versionar.
 */salida/*.webp
 */salida/*.png
+*/salida/casas/
 __pycache__/

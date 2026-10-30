@@ -52,6 +52,33 @@ DOC_PDF = "LISTA JARDINES DEL POLO #3.pdf (Drive > Jardines del Polo)"
 DOC_XLSX = 'LISTAS PIRES BENLIAN.xlsx, hoja "JARDINES DEL POLO" (2026-10-23)'
 DOC_BROCHURE = "JDP-brochure-21nov.pdf (Drive > Jardines del Polo)"
 
+# Páginas del brochure con la planta de cada casa: (planta baja, planta alta).
+# Leídas de los títulos de cada página ("CASA 07 / TIPO A / 4D · PLANTA BAJA").
+# El agrupamiento confirma por tercera vez los tipos de la lista: las páginas
+# del tipo A son las de las casas 01, 02, 07, 08, 09, 10, 15 y 16, que son
+# exactamente las ocho que la lista marca como A.
+PAGINAS_CASA = {
+    "01": (15, 16), "02": (17, 18), "07": (19, 20), "08": (21, 22),
+    "09": (23, 24), "10": (25, 26), "15": (27, 28), "16": (29, 30),
+    "03": (32, 33), "04": (34, 35), "05": (36, 37), "06": (38, 39),
+    "11": (40, 41), "12": (42, 43), "13": (44, 45), "14": (46, 47),
+    "17": (49, 50), "18": (51, 52),
+}
+
+# El metraje de la parcela que imprime cada planta del brochure, leído de esas
+# mismas páginas. No se publica: sirve para cruzarlo con la lista de precios,
+# que es la que manda. Coincide en 16 de 18 casas; las dos que no, quedan
+# anotadas en la unidad y en `discrepancias`.
+PARCELA_BROCHURE = {
+    "01": 313, "02": 351, "03": 222, "04": 222, "05": 372, "06": 191,
+    "07": 287, "08": 314, "09": 282, "10": 231, "11": 348, "12": 203,
+    "13": 352, "14": 217, "15": 293, "16": 354, "17": 250, "18": 225,
+}
+
+# Ancho máximo de las plantas que se publican. Son para mirar y hacer zoom, no
+# para imprimir: más que esto es peso sin lectura ganada.
+ANCHO_PLANTA = 1200
+
 # Página del brochure donde está el masterplan, y xref de su imagen de fondo.
 # La imagen NO trae los números: están dibujados encima como vectores. Eso es
 # justo lo que se quiere — el selector pone sus propias etiquetas.
@@ -303,6 +330,50 @@ def verificar_por_tipo(blobs, asignado, casas):
     print("  Los tres grupos quedan separados: la asignación casa-techo cierra con la lista.")
 
 
+# ───────────────────────────────────────────────── plantas de cada casa
+
+
+def exportar_plantas_casas(brochure):
+    """Recorta la planta baja y la planta alta de cada casa del brochure.
+
+    Se renderiza la región de la página en vez de extraer la imagen de fondo,
+    porque la página de planta alta dibuja el piso superior ENCIMA del mismo
+    render del terreno: quedarse con la imagen incrustada más grande traería el
+    fondo sin la planta.
+    """
+    destino = SALIDA / "casas"
+    destino.mkdir(exist_ok=True)
+
+    fichas = {}
+    for casa, paginas in sorted(PAGINAS_CASA.items()):
+        imagenes = []
+        for rotulo, numero in zip(("Planta baja", "Planta alta"), paginas):
+            pagina = brochure[numero - 1]
+            rects = [r for x in pagina.get_images(full=True) for r in pagina.get_image_rects(x[0])]
+            if not rects:
+                raise SystemExit(f"La página {numero} (casa {casa}) no tiene plano.")
+            caja = rects[0]
+            for r in rects[1:]:
+                caja = caja | r
+            caja = pymupdf.Rect(caja.x0 - 6, caja.y0 - 6, caja.x1 + 6, caja.y1 + 6) & pagina.rect
+
+            # dpi tal que el lado largo quede en ANCHO_PLANTA.
+            lado = max(caja.width, caja.height)
+            pm = pagina.get_pixmap(dpi=int(72 * ANCHO_PLANTA / lado), clip=caja)
+            im = Image.frombytes("RGB", (pm.width, pm.height), pm.samples)
+
+            archivo = f"{casa}-{rotulo.lower().replace(' ', '-')}.webp"
+            im.save(destino / archivo, "WEBP", quality=80, method=6)
+            imagenes.append(
+                {"titulo": rotulo, "imagen": f"/desarrollos/jardines-del-polo/casas/{archivo}"}
+            )
+        fichas[casa] = imagenes
+
+    peso = sum(f.stat().st_size for f in destino.glob("*.webp")) / 1024
+    print(f"Plantas por casa: {len(fichas) * 2} imágenes · {peso:.0f} KB en total")
+    return fichas
+
+
 # ───────────────────────────────────────────────────────────────── main
 
 def main():
@@ -331,6 +402,19 @@ def main():
         if pa != pb:
             discrepancias.append({"casa": numero, "campo": "precio", "listaPdf": pa, "planilla": pb})
 
+        # Tercera fuente para la parcela: el metraje impreso en la planta del
+        # brochure. No decide nada —manda la lista— pero si no coincide hay que
+        # avisarlo, no elegir en silencio.
+        if PARCELA_BROCHURE.get(numero) != b["parcela"]:
+            discrepancias.append(
+                {
+                    "casa": numero,
+                    "campo": "parcela",
+                    "planilla": b["parcela"],
+                    "brochure": PARCELA_BROCHURE.get(numero),
+                }
+            )
+
     # ── Masterplan y polígonos ───────────────────────────────────────────
     br = pymupdf.open(BROCHURE)
     pagina = br[PAGINA_MASTERPLAN - 1]
@@ -340,6 +424,8 @@ def main():
         pm = pymupdf.Pixmap(pymupdf.csRGB, pm)
     masterplan = Image.frombytes("RGB", (pm.width, pm.height), pm.samples)
     masterplan.save(SALIDA / "masterplan.webp", "WEBP", quality=88, method=6)
+
+    fichas = exportar_plantas_casas(br)
 
     blobs = techos(masterplan)
     print(f"Techos detectados: {len(blobs)}")
@@ -369,7 +455,10 @@ def main():
                 "pisos": [],
                 "zonas": zonas,
             }
-        ]
+        ],
+        # Las plantas de cada casa viajan con los planos y no con la base: son
+        # material del brochure, no dato comercial.
+        "fichas": fichas,
     }
     (SALIDA / "plantas.json").write_text(
         json.dumps(plantas, ensure_ascii=False, indent=1), encoding="utf-8"
@@ -385,6 +474,13 @@ def main():
         estado_pdf, precio_pdf = interpretar(pdf[numero]["valor"])
 
         observaciones = [AVISO_SUPERFICIES]
+        parcela_brochure = PARCELA_BROCHURE.get(numero)
+        if parcela_brochure != base["parcela"]:
+            observaciones.insert(
+                0,
+                f"Parcela a confirmar: la lista de precios dice {base['parcela']:.0f} m² y "
+                f"la planta del brochure, {parcela_brochure} m². Se muestra la lista.",
+            )
         if estado != estado_pdf or precio != precio_pdf:
             observaciones.insert(
                 0,

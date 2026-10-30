@@ -122,6 +122,7 @@
    "plano": "masterplan",
    "zona": "01",
    "observaciones": [
+    "Parcela a confirmar: la lista de precios dice 303 m² y la planta del brochure, 313 m². Se muestra la lista.",
     "Metraje a cotejar con Ing. Agrimensor (según el brochure del desarrollo)."
    ],
    "fuentes": {
@@ -175,6 +176,7 @@
    "plano": "masterplan",
    "zona": "02",
    "observaciones": [
+    "Parcela a confirmar: la lista de precios dice 357 m² y la planta del brochure, 351 m². Se muestra la lista.",
     "Metraje a cotejar con Ing. Agrimensor (según el brochure del desarrollo)."
    ],
    "fuentes": {
@@ -1039,5 +1041,18 @@
    }
   }
  ],
- "discrepancias": []
+ "discrepancias": [
+  {
+   "casa": "01",
+   "campo": "parcela",
+   "planilla": 303.0,
+   "brochure": 313
+  },
+  {
+   "casa": "02",
+   "campo": "parcela",
+   "planilla": 357.0,
+   "brochure": 351
+  }
+ ]
 }
