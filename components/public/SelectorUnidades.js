@@ -370,7 +370,11 @@ export default function SelectorUnidades({ datos, plantas, proyectoNombre }) {
 
         {/* Plano o lista */}
         {vista === "plano" ? (
-          <div className="min-w-0">
+          // Sin rail de pisos hay una columna menos ocupada: el plano toma las
+          // dos primeras, igual que la tabla, para que la ficha conserve la
+          // suya. Si no, la columna del medio se encoge a cero y la ficha
+          // desaparece.
+          <div className={`min-w-0 ${porPisos ? "" : "lg:col-span-2"}`}>
             <p className="mb-2 text-sm text-slate-500">
               {porPisos ? `Piso ${piso}` : plano.titulo} · tocá o pasá el cursor sobre una{" "}
               {sustantivo.unidad}

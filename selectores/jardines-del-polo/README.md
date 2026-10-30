@@ -34,11 +34,11 @@ metraje que imprime la planta de cada casa en el brochure**. Coincide en 16 de
 | 01 | 303 m² | 313 m² |
 | 02 | 357 m² | 351 m² |
 
-Se publica el de la lista, que es el documento comercial, y la casa queda con
-una observación que dice las dos cifras. **No se elige en silencio.** Vale la
-pena preguntarle a Pires Benlian cuál de las dos vale: son las dos casas del
-mismo bloque, así que puede ser una revisión de amojonamiento que entró en un
-documento y no en el otro.
+**Resuelto el 30/10/2026:** la dirección comercial lo dio por error del
+brochure. Vale la lista de precios, y la web no muestra ninguna advertencia al
+respecto. La diferencia sigue registrada en `PARCELA_BROCHURE` y en
+`discrepancias` —no se borra— porque es lo que explica por qué el número
+publicado es el que es, si alguien lo compara con el folleto dentro de un año.
 
 ## Las tres verificaciones
 
@@ -95,8 +95,5 @@ node scripts/cargar-unidades.js jardines-del-polo --aplicar --sincronizar-fichas
 
 - **Baños por tipo.** Ni la lista ni las páginas de tipo los dicen. La ficha
   muestra "A confirmar" en vez de inventar un número.
-- **La parcela de las casas 01 y 02**, que arriba queda explicada. Cuando el
-  desarrollador confirme, se corrige en la planilla y se vuelve a correr el
-  generador.
 - **Fecha de la lista oficial en PDF.** El archivo se llama "#3" y no trae
   fecha adentro. Se usa sólo para contrastar, así que no bloquea nada.

@@ -173,7 +173,11 @@ const CAMPOS_DESCRIPTIVOS = [
   console.log(`  · ya estaban: ${yaEstaban.length} (${difieren.length} con precio o estado distinto)`);
 
   if (doc.discrepancias?.length) {
-    console.log(`\n⚠  ${doc.discrepancias.length} diferencias entre los documentos de origen (quedan como observación en la unidad).`);
+    console.log(
+      `\n⚠  ${doc.discrepancias.length} diferencias entre los documentos de origen, ` +
+        `registradas en salida/unidades.json. Las que el proyecto no dio por resueltas ` +
+        `viajan además como observación de la unidad.`
+    );
   }
 
   if (difieren.length > 0) {

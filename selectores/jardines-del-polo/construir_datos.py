@@ -66,9 +66,15 @@ PAGINAS_CASA = {
 }
 
 # El metraje de la parcela que imprime cada planta del brochure, leído de esas
-# mismas páginas. No se publica: sirve para cruzarlo con la lista de precios,
-# que es la que manda. Coincide en 16 de 18 casas; las dos que no, quedan
-# anotadas en la unidad y en `discrepancias`.
+# mismas páginas. Sirve para cruzarlo con la lista de precios y coincide en 16
+# de 18 casas.
+#
+# Las dos que no son la 01 (303 en la lista, 313 en el brochure) y la 02 (357 y
+# 351). El 30/10/2026 la dirección comercial resolvió darlo por error del
+# brochure: vale la lista, y la web no muestra ninguna advertencia. La
+# diferencia queda registrada acá y en `discrepancias`, que es el motivo de que
+# este diccionario siga existiendo: explica por qué el número publicado es el
+# que es, sin ensuciar la ficha del comprador.
 PARCELA_BROCHURE = {
     "01": 313, "02": 351, "03": 222, "04": 222, "05": 372, "06": 191,
     "07": 287, "08": 314, "09": 282, "10": 231, "11": 348, "12": 203,
@@ -474,13 +480,6 @@ def main():
         estado_pdf, precio_pdf = interpretar(pdf[numero]["valor"])
 
         observaciones = [AVISO_SUPERFICIES]
-        parcela_brochure = PARCELA_BROCHURE.get(numero)
-        if parcela_brochure != base["parcela"]:
-            observaciones.insert(
-                0,
-                f"Parcela a confirmar: la lista de precios dice {base['parcela']:.0f} m² y "
-                f"la planta del brochure, {parcela_brochure} m². Se muestra la lista.",
-            )
         if estado != estado_pdf or precio != precio_pdf:
             observaciones.insert(
                 0,
