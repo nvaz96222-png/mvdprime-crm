@@ -1,0 +1,13 @@
+# La planilla de Pires Benlian trae además las listas de precios de los otros
+# desarrollos. Este repositorio es público: se usa en local, no se versiona.
+*/datos-fuente/*.xlsx
+
+# Brochures: pesan decenas de MB y están en Drive. Bajalos de ahí cuando
+# necesites regenerar los datos (el README de cada selector dice de dónde).
+*/datos-fuente/*BROCHURE*.pdf
+
+# Imágenes generadas: la del plano se copia a public/ y la de verificación es
+# para mirar, no para versionar.
+*/salida/*.webp
+*/salida/*.png
+__pycache__/

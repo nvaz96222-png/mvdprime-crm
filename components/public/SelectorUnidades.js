@@ -49,6 +49,30 @@ const precioTexto = (u) => {
 };
 const areaTexto = (m2) => (m2 == null ? "—" : `${af.format(m2)} m²`);
 
+// Cada desarrollo nombra sus metrajes como los nombra su documento: en un
+// edificio el total es el área total de la unidad; en un housing, los metros
+// construidos de la casa.
+const ROTULO_TOTAL = { casa: "Metros construidos", apartamento: "Área total" };
+const rotuloTotal = (tipo) => ROTULO_TOTAL[tipo] || "Área total";
+
+// Sólo se muestra la superficie que la unidad realmente tiene: un apartamento
+// no tiene parcela y una casa no tiene áreas comunes. El desglose por ambiente
+// va al final, con los nombres que le puso el desarrollador.
+function superficies(u) {
+  const filas = [];
+  const agregar = (k, v) => {
+    if (v != null) filas.push([k, areaTexto(v)]);
+  };
+  agregar("Área de la parcela", u.parcela);
+  agregar("Área habitable", u.habitable);
+  agregar("Terrazas uso exclusivo", u.terrazas);
+  agregar("Sub total", u.subTotal);
+  agregar("Áreas comunes", u.comunes);
+  agregar(rotuloTotal(u.tipo), u.total);
+  for (const [k, v] of u.desglose || []) agregar(k, v);
+  return filas;
+}
+
 // Centroide del polígono, para ubicar el número de la unidad.
 function centroide(puntos) {
   let area = 0;
@@ -79,17 +103,23 @@ function caja(puntos) {
 }
 
 export default function SelectorUnidades({ datos, plantas, proyectoNombre }) {
-  const { unidades, avisoPrecios, conexiones, formaDePago, garajes } = datos;
+  const { unidades, avisoPrecios, conexiones, formaDePago, garajes, sustantivo } = datos;
   const planos = plantas.planos;
 
+  // Un desarrollo de casas tiene un solo plano —el loteo— y ninguna unidad
+  // tiene piso: ahí no va el rail de pisos ni el encabezado "Piso 3".
+  const porPisos = planos.length > 1;
+
   const pisos = useMemo(
-    () => [...new Set(unidades.map((u) => u.piso))].sort((a, b) => b - a),
+    () => [...new Set(unidades.map((u) => u.piso).filter((p) => p != null))].sort((a, b) => b - a),
     [unidades]
   );
+  const hayNiveles = useMemo(() => unidades.some((u) => u.nivel), [unidades]);
   const tipologias = useMemo(() => {
     const orden = ["Monoambiente", "1 dormitorio", "2 dormitorios"];
     return [...new Set(unidades.map((u) => u.tipologia))].sort(
-      (a, b) => orden.indexOf(a) - orden.indexOf(b)
+      (a, b) =>
+        orden.indexOf(a) - orden.indexOf(b) || String(a).localeCompare(String(b), "es")
     );
   }, [unidades]);
   const estadosPresentes = useMemo(
@@ -104,6 +134,16 @@ export default function SelectorUnidades({ datos, plantas, proyectoNombre }) {
     () => Math.min(...unidades.filter((u) => u.precio != null).map((u) => u.precio)),
     [unidades]
   );
+
+  // Letra chica de la ficha, armada con lo que haya cargado el CRM.
+  const condiciones = useMemo(() => {
+    const partes = [];
+    if (formaDePago) partes.push(`Forma de pago: ${formaDePago}.`);
+    if (conexiones) partes.push(conexiones);
+    if (garajes?.precio != null)
+      partes.push(`Garaje opcional: US$ ${nf.format(garajes.precio)}.`);
+    return partes;
+  }, [formaDePago, conexiones, garajes]);
 
   const [piso, setPiso] = useState(pisos[pisos.length - 1]);
   const [vista, setVista] = useState("plano");
@@ -129,16 +169,16 @@ export default function SelectorUnidades({ datos, plantas, proyectoNombre }) {
   );
   const visibles = useMemo(() => new Set(filtradas.map((u) => u.id)), [filtradas]);
 
-  const plano = planos.find((p) => p.pisos.includes(piso)) || null;
+  const plano = porPisos ? planos.find((p) => p.pisos.includes(piso)) || null : planos[0];
   const planoDeSel = sel ? planos.find((p) => p.id === sel.plano) : null;
-  const unidadesDelPiso = unidades.filter((u) => u.piso === piso);
+  const enElPlano = porPisos ? unidades.filter((u) => u.piso === piso) : unidades;
 
   const alternar = (lista, v) =>
     lista.includes(v) ? lista.filter((x) => x !== v) : [...lista, v];
 
   function elegir(u) {
     setSel(u);
-    if (u.piso !== piso) setPiso(u.piso);
+    if (porPisos && u.piso !== piso) setPiso(u.piso);
   }
 
   // El botón de la ficha prellena el formulario de contacto que ya tiene la
@@ -149,8 +189,8 @@ export default function SelectorUnidades({ datos, plantas, proyectoNombre }) {
         detail: {
           titulo: u.etiqueta,
           mensaje:
-            `Hola, me interesa la unidad ${u.etiqueta} de ${proyectoNombre} ` +
-            `(${u.nivel}, ${u.tipologia}, ${areaTexto(u.total)}` +
+            `Hola, me interesa la ${sustantivo.unidad} ${u.etiqueta} de ${proyectoNombre} ` +
+            `(${[u.nivel, u.tipologia, areaTexto(u.total)].filter(Boolean).join(", ")}` +
             `${u.precio != null ? `, ${precioTexto(u)}` : ""}). ¿Pueden contactarme?`,
         },
       })
@@ -174,10 +214,10 @@ export default function SelectorUnidades({ datos, plantas, proyectoNombre }) {
       {/* Cabecera */}
       <div className="flex flex-wrap items-end justify-between gap-4 border-b border-slate-100 px-5 py-4">
         <div>
-          <h2 className="text-lg font-bold text-navy">Elegí tu apartamento</h2>
+          <h2 className="text-lg font-bold text-navy">Elegí tu {sustantivo.singular}</h2>
           <p className="mt-0.5 text-sm text-slate-500">
-            {unidades.filter((u) => u.estado === "disponible").length} unidades disponibles de{" "}
-            {unidades.length} · desde US$ {nf.format(precioMinimo)}
+            {unidades.filter((u) => u.estado === "disponible").length} {sustantivo.unidades}{" "}
+            disponibles de {unidades.length} · desde US$ {nf.format(precioMinimo)}
           </p>
         </div>
         <ul className="flex flex-wrap items-center gap-x-4 gap-y-1.5">
@@ -293,7 +333,7 @@ export default function SelectorUnidades({ datos, plantas, proyectoNombre }) {
       {/* Cuerpo */}
       <div className="grid grid-cols-1 gap-4 p-4 lg:grid-cols-[auto_minmax(0,1fr)_320px]">
         {/* Rail de pisos */}
-        {vista === "plano" && (
+        {vista === "plano" && porPisos && (
           <nav
             aria-label="Pisos del edificio"
             className="flex gap-1.5 overflow-x-auto rounded-xl border border-slate-200 p-1.5 lg:w-16 lg:flex-col lg:overflow-visible"
@@ -322,7 +362,8 @@ export default function SelectorUnidades({ datos, plantas, proyectoNombre }) {
         {vista === "plano" ? (
           <div className="min-w-0">
             <p className="mb-2 text-sm text-slate-500">
-              Piso {piso} · tocá o pasá el cursor sobre una unidad
+              {porPisos ? `Piso ${piso}` : plano.titulo} · tocá o pasá el cursor sobre una{" "}
+              {sustantivo.unidad}
             </p>
             <div className="overflow-x-auto">
               {/* Abajo de lg la planta se desplaza en horizontal para que cada
@@ -332,7 +373,7 @@ export default function SelectorUnidades({ datos, plantas, proyectoNombre }) {
                   src={plano.imagen}
                   width={plano.ancho}
                   height={plano.alto}
-                  alt={`Planta del piso ${piso} de ${proyectoNombre}`}
+                  alt={`${plano.titulo} de ${proyectoNombre}`}
                   className="block w-full"
                 />
                 <svg
@@ -341,7 +382,7 @@ export default function SelectorUnidades({ datos, plantas, proyectoNombre }) {
                   className="absolute inset-0 h-full w-full"
                   onPointerLeave={() => setGlobo(null)}
                 >
-                  {unidadesDelPiso
+                  {enElPlano
                     .filter((u) => plano.zonas[u.zona])
                     .map((u) => {
                       const apagada = !visibles.has(u.id);
@@ -379,7 +420,7 @@ export default function SelectorUnidades({ datos, plantas, proyectoNombre }) {
 
                 {/* Números: en HTML para que no se achiquen con la imagen */}
                 <div aria-hidden className="pointer-events-none absolute inset-0">
-                  {unidadesDelPiso
+                  {enElPlano
                     .filter((u) => plano.zonas[u.zona] && visibles.has(u.id))
                     .map((u) => {
                       const [cx, cy] = centroide(plano.zonas[u.zona]);
@@ -421,9 +462,9 @@ export default function SelectorUnidades({ datos, plantas, proyectoNombre }) {
               <thead>
                 <tr className="bg-slate-50 text-left text-xs uppercase tracking-wide text-slate-400">
                   <th className="px-4 py-2.5 font-medium">Unidad</th>
-                  <th className="px-4 py-2.5 font-medium">Planta</th>
+                  {hayNiveles && <th className="px-4 py-2.5 font-medium">Planta</th>}
                   <th className="px-4 py-2.5 font-medium">Tipología</th>
-                  <th className="px-4 py-2.5 font-medium">Área total</th>
+                  <th className="px-4 py-2.5 font-medium">{rotuloTotal(unidades[0]?.tipo)}</th>
                   <th className="px-4 py-2.5 font-medium">Precio</th>
                   <th className="px-4 py-2.5 font-medium">Estado</th>
                 </tr>
@@ -446,7 +487,7 @@ export default function SelectorUnidades({ datos, plantas, proyectoNombre }) {
                     }`}
                   >
                     <td className="px-4 py-2.5 font-medium text-navy">{u.etiqueta}</td>
-                    <td className="px-4 py-2.5 text-slate-600">{u.nivel}</td>
+                    {hayNiveles && <td className="px-4 py-2.5 text-slate-600">{u.nivel}</td>}
                     <td className="px-4 py-2.5 text-slate-600">{u.tipologia}</td>
                     <td className="px-4 py-2.5 tabular-nums text-slate-600">{areaTexto(u.total)}</td>
                     <td className="px-4 py-2.5 tabular-nums text-slate-700">{precioTexto(u)}</td>
@@ -461,7 +502,7 @@ export default function SelectorUnidades({ datos, plantas, proyectoNombre }) {
                 ))}
                 {filtradas.length === 0 && (
                   <tr>
-                    <td colSpan={6} className="px-4 py-10 text-center text-slate-400">
+                    <td colSpan={hayNiveles ? 6 : 5} className="px-4 py-10 text-center text-slate-400">
                       Ninguna unidad cumple con los filtros elegidos.
                     </td>
                   </tr>
@@ -475,10 +516,10 @@ export default function SelectorUnidades({ datos, plantas, proyectoNombre }) {
         <aside aria-live="polite" className="lg:w-80">
           {!sel ? (
             <div className="rounded-xl border border-dashed border-slate-200 p-6 text-center">
-              <p className="text-sm font-medium text-slate-600">Elegí una unidad</p>
+              <p className="text-sm font-medium text-slate-600">Elegí una {sustantivo.unidad}</p>
               <p className="mt-1.5 text-sm text-slate-400">
-                Tocá un apartamento en la planta o en la lista para ver su tipología, superficies,
-                precio y estado.
+                Tocá {sustantivo.singular === "casa" ? "una casa" : "un apartamento"} en el plano o
+                en la lista para ver su tipología, superficies, precio y estado.
               </p>
             </div>
           ) : (
@@ -487,7 +528,7 @@ export default function SelectorUnidades({ datos, plantas, proyectoNombre }) {
                 <div>
                   <p className="text-xl font-bold text-navy">{sel.etiqueta}</p>
                   <p className="text-sm text-slate-500">
-                    {sel.nivel} · {sel.tipologia}
+                    {[sel.nivel, sel.tipologia].filter(Boolean).join(" · ")}
                   </p>
                 </div>
                 <span
@@ -511,20 +552,14 @@ export default function SelectorUnidades({ datos, plantas, proyectoNombre }) {
               )}
 
               <dl className="grid grid-cols-2 gap-px bg-slate-100 text-sm">
-                <Dato k="Dormitorios" v={sel.dormitorios === 0 ? "Monoambiente" : sel.dormitorios} />
+                <Dato
+                  k="Dormitorios"
+                  v={sel.dormitorios === 0 ? "Monoambiente" : sel.dormitorios ?? "A confirmar"}
+                />
                 <Dato k="Baños" v={sel.banos ?? "A confirmar"} />
-                <Dato k="Área habitable" v={areaTexto(sel.habitable)} />
-                <Dato k="Terrazas uso exclusivo" v={areaTexto(sel.terrazas)} />
-                <Dato k="Sub total" v={areaTexto(sel.subTotal)} />
-                <Dato k="Áreas comunes" v={areaTexto(sel.comunes)} />
-                <Dato k="Área total" v={areaTexto(sel.total)} ancha />
-                {sel.precio != null && (
-                  <Dato
-                    k="Conexiones (4%)"
-                    v={`US$ ${nf.format(Math.round(sel.precio * 0.04))}`}
-                    ancha
-                  />
-                )}
+                {superficies(sel).map(([k, v], i, todas) => (
+                  <Dato key={k} k={k} v={v} ancha={i === todas.length - 1 && todas.length % 2 === 1} />
+                ))}
               </dl>
 
               {sel.observaciones?.map((o) => (
@@ -536,10 +571,13 @@ export default function SelectorUnidades({ datos, plantas, proyectoNombre }) {
                 </p>
               ))}
 
-              <p className="bg-white px-4 py-3 text-xs leading-relaxed text-slate-500">
-                Forma de pago: {formaDePago}. {conexiones} Garaje opcional: US${" "}
-                {nf.format(garajes.precio)}.
-              </p>
+              {/* Cada parte aparece sólo si el dato está cargado: sin precio
+                  de garaje no se anuncia un "US$ 0". */}
+              {condiciones.length > 0 && (
+                <p className="bg-white px-4 py-3 text-xs leading-relaxed text-slate-500">
+                  {condiciones.join(" ")}
+                </p>
+              )}
 
               <div className="border-t border-slate-100 bg-slate-50 p-3">
                 <button

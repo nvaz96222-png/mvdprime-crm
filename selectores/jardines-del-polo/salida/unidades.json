@@ -1,0 +1,1043 @@
+{
+ "generado": "selectores/jardines-del-polo/construir_datos.py",
+ "proyecto": "jardines-del-polo",
+ "fuentes": {
+  "listaOficialPdf": "LISTA JARDINES DEL POLO #3.pdf (Drive > Jardines del Polo)",
+  "planillaVigente": "LISTAS PIRES BENLIAN.xlsx, hoja \"JARDINES DEL POLO\" (2026-10-23)",
+  "brochure": "JDP-brochure-21nov.pdf (Drive > Jardines del Polo)"
+ },
+ "reglaDePrecedencia": "Ante diferencias entre documentos vale el más reciente (la planilla). La lectura de la lista oficial se conserva en historico.listaOficialPdf y la diferencia queda listada en discrepancias.",
+ "condiciones": {
+  "gastos": "Gastos: 5% del precio de venta.",
+  "formaDePago": "25% compromiso · 6 trimestres de 10% · 15% a la entrega",
+  "avisoPrecios": "Precios sujetos a ajuste por avance de ventas."
+ },
+ "tipos": {
+  "A": {
+   "nombre": "Tipo A · 4 dormitorios",
+   "dormitorios": 4,
+   "construidos": 208,
+   "desglose": [
+    [
+     "Planta baja",
+     84
+    ],
+    [
+     "Planta alta",
+     98
+    ],
+    [
+     "Lavadero",
+     5
+    ],
+    [
+     "Galería",
+     21
+    ]
+   ]
+  },
+  "B": {
+   "nombre": "Tipo B · 3 dormitorios",
+   "dormitorios": 3,
+   "construidos": 168,
+   "desglose": [
+    [
+     "Planta baja",
+     62
+    ],
+    [
+     "Planta alta",
+     79
+    ],
+    [
+     "Lavadero",
+     5
+    ],
+    [
+     "Galería",
+     22
+    ]
+   ]
+  },
+  "C": {
+   "nombre": "Tipo C · 3 dormitorios",
+   "dormitorios": 3,
+   "construidos": 166,
+   "desglose": [
+    [
+     "Planta baja",
+     66
+    ],
+    [
+     "Planta alta",
+     80
+    ],
+    [
+     "Lavadero",
+     4
+    ],
+    [
+     "Galería",
+     16
+    ]
+   ]
+  }
+ },
+ "unidades": [
+  {
+   "id": "casa-01",
+   "unidad": "01",
+   "etiqueta": "Casa 01",
+   "tipo": "casa",
+   "nivel": null,
+   "piso": null,
+   "tipologia": "Tipo A · 4 dormitorios",
+   "dormitorios": 4,
+   "banos": null,
+   "superficies": {
+    "parcela": 303.0,
+    "construidos": 208.0,
+    "desglose": [
+     [
+      "Planta baja",
+      84
+     ],
+     [
+      "Planta alta",
+      98
+     ],
+     [
+      "Lavadero",
+      5
+     ],
+     [
+      "Galería",
+      21
+     ]
+    ]
+   },
+   "precio": 760790.0,
+   "moneda": "USD",
+   "estado": "disponible",
+   "plano": "masterplan",
+   "zona": "01",
+   "observaciones": [
+    "Metraje a cotejar con Ing. Agrimensor (según el brochure del desarrollo)."
+   ],
+   "fuentes": {
+    "estadoYPrecio": "LISTAS PIRES BENLIAN.xlsx, hoja \"JARDINES DEL POLO\" (2026-10-23)",
+    "superficies": "LISTAS PIRES BENLIAN.xlsx, hoja \"JARDINES DEL POLO\" (2026-10-23) (parcela y construidos) · JDP-brochure-21nov.pdf (Drive > Jardines del Polo) (desglose por tipo)",
+    "plano": "JDP-brochure-21nov.pdf (Drive > Jardines del Polo) — masterplan, página 5"
+   },
+   "historico": {
+    "listaOficialPdf": {
+     "estado": "disponible",
+     "precio": 760790.0,
+     "documento": "LISTA JARDINES DEL POLO #3.pdf (Drive > Jardines del Polo)"
+    }
+   }
+  },
+  {
+   "id": "casa-02",
+   "unidad": "02",
+   "etiqueta": "Casa 02",
+   "tipo": "casa",
+   "nivel": null,
+   "piso": null,
+   "tipologia": "Tipo A · 4 dormitorios",
+   "dormitorios": 4,
+   "banos": null,
+   "superficies": {
+    "parcela": 357.0,
+    "construidos": 208.0,
+    "desglose": [
+     [
+      "Planta baja",
+      84
+     ],
+     [
+      "Planta alta",
+      98
+     ],
+     [
+      "Lavadero",
+      5
+     ],
+     [
+      "Galería",
+      21
+     ]
+    ]
+   },
+   "precio": 789520.0,
+   "moneda": "USD",
+   "estado": "disponible",
+   "plano": "masterplan",
+   "zona": "02",
+   "observaciones": [
+    "Metraje a cotejar con Ing. Agrimensor (según el brochure del desarrollo)."
+   ],
+   "fuentes": {
+    "estadoYPrecio": "LISTAS PIRES BENLIAN.xlsx, hoja \"JARDINES DEL POLO\" (2026-10-23)",
+    "superficies": "LISTAS PIRES BENLIAN.xlsx, hoja \"JARDINES DEL POLO\" (2026-10-23) (parcela y construidos) · JDP-brochure-21nov.pdf (Drive > Jardines del Polo) (desglose por tipo)",
+    "plano": "JDP-brochure-21nov.pdf (Drive > Jardines del Polo) — masterplan, página 5"
+   },
+   "historico": {
+    "listaOficialPdf": {
+     "estado": "disponible",
+     "precio": 789520.0,
+     "documento": "LISTA JARDINES DEL POLO #3.pdf (Drive > Jardines del Polo)"
+    }
+   }
+  },
+  {
+   "id": "casa-03",
+   "unidad": "03",
+   "etiqueta": "Casa 03",
+   "tipo": "casa",
+   "nivel": null,
+   "piso": null,
+   "tipologia": "Tipo B · 3 dormitorios",
+   "dormitorios": 3,
+   "banos": null,
+   "superficies": {
+    "parcela": 222.0,
+    "construidos": 168.0,
+    "desglose": [
+     [
+      "Planta baja",
+      62
+     ],
+     [
+      "Planta alta",
+      79
+     ],
+     [
+      "Lavadero",
+      5
+     ],
+     [
+      "Galería",
+      22
+     ]
+    ]
+   },
+   "precio": 591190.0,
+   "moneda": "USD",
+   "estado": "disponible",
+   "plano": "masterplan",
+   "zona": "03",
+   "observaciones": [
+    "Metraje a cotejar con Ing. Agrimensor (según el brochure del desarrollo)."
+   ],
+   "fuentes": {
+    "estadoYPrecio": "LISTAS PIRES BENLIAN.xlsx, hoja \"JARDINES DEL POLO\" (2026-10-23)",
+    "superficies": "LISTAS PIRES BENLIAN.xlsx, hoja \"JARDINES DEL POLO\" (2026-10-23) (parcela y construidos) · JDP-brochure-21nov.pdf (Drive > Jardines del Polo) (desglose por tipo)",
+    "plano": "JDP-brochure-21nov.pdf (Drive > Jardines del Polo) — masterplan, página 5"
+   },
+   "historico": {
+    "listaOficialPdf": {
+     "estado": "disponible",
+     "precio": 591190.0,
+     "documento": "LISTA JARDINES DEL POLO #3.pdf (Drive > Jardines del Polo)"
+    }
+   }
+  },
+  {
+   "id": "casa-04",
+   "unidad": "04",
+   "etiqueta": "Casa 04",
+   "tipo": "casa",
+   "nivel": null,
+   "piso": null,
+   "tipologia": "Tipo B · 3 dormitorios",
+   "dormitorios": 3,
+   "banos": null,
+   "superficies": {
+    "parcela": 222.0,
+    "construidos": 168.0,
+    "desglose": [
+     [
+      "Planta baja",
+      62
+     ],
+     [
+      "Planta alta",
+      79
+     ],
+     [
+      "Lavadero",
+      5
+     ],
+     [
+      "Galería",
+      22
+     ]
+    ]
+   },
+   "precio": 591190.0,
+   "moneda": "USD",
+   "estado": "disponible",
+   "plano": "masterplan",
+   "zona": "04",
+   "observaciones": [
+    "Metraje a cotejar con Ing. Agrimensor (según el brochure del desarrollo)."
+   ],
+   "fuentes": {
+    "estadoYPrecio": "LISTAS PIRES BENLIAN.xlsx, hoja \"JARDINES DEL POLO\" (2026-10-23)",
+    "superficies": "LISTAS PIRES BENLIAN.xlsx, hoja \"JARDINES DEL POLO\" (2026-10-23) (parcela y construidos) · JDP-brochure-21nov.pdf (Drive > Jardines del Polo) (desglose por tipo)",
+    "plano": "JDP-brochure-21nov.pdf (Drive > Jardines del Polo) — masterplan, página 5"
+   },
+   "historico": {
+    "listaOficialPdf": {
+     "estado": "disponible",
+     "precio": 591190.0,
+     "documento": "LISTA JARDINES DEL POLO #3.pdf (Drive > Jardines del Polo)"
+    }
+   }
+  },
+  {
+   "id": "casa-05",
+   "unidad": "05",
+   "etiqueta": "Casa 05",
+   "tipo": "casa",
+   "nivel": null,
+   "piso": null,
+   "tipologia": "Tipo B · 3 dormitorios",
+   "dormitorios": 3,
+   "banos": null,
+   "superficies": {
+    "parcela": 372.0,
+    "construidos": 168.0,
+    "desglose": [
+     [
+      "Planta baja",
+      62
+     ],
+     [
+      "Planta alta",
+      79
+     ],
+     [
+      "Lavadero",
+      5
+     ],
+     [
+      "Galería",
+      22
+     ]
+    ]
+   },
+   "precio": 704590.0,
+   "moneda": "USD",
+   "estado": "disponible",
+   "plano": "masterplan",
+   "zona": "05",
+   "observaciones": [
+    "Metraje a cotejar con Ing. Agrimensor (según el brochure del desarrollo)."
+   ],
+   "fuentes": {
+    "estadoYPrecio": "LISTAS PIRES BENLIAN.xlsx, hoja \"JARDINES DEL POLO\" (2026-10-23)",
+    "superficies": "LISTAS PIRES BENLIAN.xlsx, hoja \"JARDINES DEL POLO\" (2026-10-23) (parcela y construidos) · JDP-brochure-21nov.pdf (Drive > Jardines del Polo) (desglose por tipo)",
+    "plano": "JDP-brochure-21nov.pdf (Drive > Jardines del Polo) — masterplan, página 5"
+   },
+   "historico": {
+    "listaOficialPdf": {
+     "estado": "disponible",
+     "precio": 704590.0,
+     "documento": "LISTA JARDINES DEL POLO #3.pdf (Drive > Jardines del Polo)"
+    }
+   }
+  },
+  {
+   "id": "casa-06",
+   "unidad": "06",
+   "etiqueta": "Casa 06",
+   "tipo": "casa",
+   "nivel": null,
+   "piso": null,
+   "tipologia": "Tipo B · 3 dormitorios",
+   "dormitorios": 3,
+   "banos": null,
+   "superficies": {
+    "parcela": 191.0,
+    "construidos": 168.0,
+    "desglose": [
+     [
+      "Planta baja",
+      62
+     ],
+     [
+      "Planta alta",
+      79
+     ],
+     [
+      "Lavadero",
+      5
+     ],
+     [
+      "Galería",
+      22
+     ]
+    ]
+   },
+   "precio": null,
+   "moneda": "USD",
+   "estado": "vendido",
+   "plano": "masterplan",
+   "zona": "06",
+   "observaciones": [
+    "Metraje a cotejar con Ing. Agrimensor (según el brochure del desarrollo)."
+   ],
+   "fuentes": {
+    "estadoYPrecio": "LISTAS PIRES BENLIAN.xlsx, hoja \"JARDINES DEL POLO\" (2026-10-23)",
+    "superficies": "LISTAS PIRES BENLIAN.xlsx, hoja \"JARDINES DEL POLO\" (2026-10-23) (parcela y construidos) · JDP-brochure-21nov.pdf (Drive > Jardines del Polo) (desglose por tipo)",
+    "plano": "JDP-brochure-21nov.pdf (Drive > Jardines del Polo) — masterplan, página 5"
+   },
+   "historico": {
+    "listaOficialPdf": {
+     "estado": "vendido",
+     "precio": null,
+     "documento": "LISTA JARDINES DEL POLO #3.pdf (Drive > Jardines del Polo)"
+    }
+   }
+  },
+  {
+   "id": "casa-07",
+   "unidad": "07",
+   "etiqueta": "Casa 07",
+   "tipo": "casa",
+   "nivel": null,
+   "piso": null,
+   "tipologia": "Tipo A · 4 dormitorios",
+   "dormitorios": 4,
+   "banos": null,
+   "superficies": {
+    "parcela": 287.0,
+    "construidos": 208.0,
+    "desglose": [
+     [
+      "Planta baja",
+      84
+     ],
+     [
+      "Planta alta",
+      98
+     ],
+     [
+      "Lavadero",
+      5
+     ],
+     [
+      "Galería",
+      21
+     ]
+    ]
+   },
+   "precio": null,
+   "moneda": "USD",
+   "estado": "vendido",
+   "plano": "masterplan",
+   "zona": "07",
+   "observaciones": [
+    "Metraje a cotejar con Ing. Agrimensor (según el brochure del desarrollo)."
+   ],
+   "fuentes": {
+    "estadoYPrecio": "LISTAS PIRES BENLIAN.xlsx, hoja \"JARDINES DEL POLO\" (2026-10-23)",
+    "superficies": "LISTAS PIRES BENLIAN.xlsx, hoja \"JARDINES DEL POLO\" (2026-10-23) (parcela y construidos) · JDP-brochure-21nov.pdf (Drive > Jardines del Polo) (desglose por tipo)",
+    "plano": "JDP-brochure-21nov.pdf (Drive > Jardines del Polo) — masterplan, página 5"
+   },
+   "historico": {
+    "listaOficialPdf": {
+     "estado": "vendido",
+     "precio": null,
+     "documento": "LISTA JARDINES DEL POLO #3.pdf (Drive > Jardines del Polo)"
+    }
+   }
+  },
+  {
+   "id": "casa-08",
+   "unidad": "08",
+   "etiqueta": "Casa 08",
+   "tipo": "casa",
+   "nivel": null,
+   "piso": null,
+   "tipologia": "Tipo A · 4 dormitorios",
+   "dormitorios": 4,
+   "banos": null,
+   "superficies": {
+    "parcela": 314.0,
+    "construidos": 208.0,
+    "desglose": [
+     [
+      "Planta baja",
+      84
+     ],
+     [
+      "Planta alta",
+      98
+     ],
+     [
+      "Lavadero",
+      5
+     ],
+     [
+      "Galería",
+      21
+     ]
+    ]
+   },
+   "precio": 761540.0,
+   "moneda": "USD",
+   "estado": "disponible",
+   "plano": "masterplan",
+   "zona": "08",
+   "observaciones": [
+    "Metraje a cotejar con Ing. Agrimensor (según el brochure del desarrollo)."
+   ],
+   "fuentes": {
+    "estadoYPrecio": "LISTAS PIRES BENLIAN.xlsx, hoja \"JARDINES DEL POLO\" (2026-10-23)",
+    "superficies": "LISTAS PIRES BENLIAN.xlsx, hoja \"JARDINES DEL POLO\" (2026-10-23) (parcela y construidos) · JDP-brochure-21nov.pdf (Drive > Jardines del Polo) (desglose por tipo)",
+    "plano": "JDP-brochure-21nov.pdf (Drive > Jardines del Polo) — masterplan, página 5"
+   },
+   "historico": {
+    "listaOficialPdf": {
+     "estado": "disponible",
+     "precio": 761540.0,
+     "documento": "LISTA JARDINES DEL POLO #3.pdf (Drive > Jardines del Polo)"
+    }
+   }
+  },
+  {
+   "id": "casa-09",
+   "unidad": "09",
+   "etiqueta": "Casa 09",
+   "tipo": "casa",
+   "nivel": null,
+   "piso": null,
+   "tipologia": "Tipo A · 4 dormitorios",
+   "dormitorios": 4,
+   "banos": null,
+   "superficies": {
+    "parcela": 282.0,
+    "construidos": 208.0,
+    "desglose": [
+     [
+      "Planta baja",
+      84
+     ],
+     [
+      "Planta alta",
+      98
+     ],
+     [
+      "Lavadero",
+      5
+     ],
+     [
+      "Galería",
+      21
+     ]
+    ]
+   },
+   "precio": null,
+   "moneda": "USD",
+   "estado": "vendido",
+   "plano": "masterplan",
+   "zona": "09",
+   "observaciones": [
+    "Metraje a cotejar con Ing. Agrimensor (según el brochure del desarrollo)."
+   ],
+   "fuentes": {
+    "estadoYPrecio": "LISTAS PIRES BENLIAN.xlsx, hoja \"JARDINES DEL POLO\" (2026-10-23)",
+    "superficies": "LISTAS PIRES BENLIAN.xlsx, hoja \"JARDINES DEL POLO\" (2026-10-23) (parcela y construidos) · JDP-brochure-21nov.pdf (Drive > Jardines del Polo) (desglose por tipo)",
+    "plano": "JDP-brochure-21nov.pdf (Drive > Jardines del Polo) — masterplan, página 5"
+   },
+   "historico": {
+    "listaOficialPdf": {
+     "estado": "vendido",
+     "precio": null,
+     "documento": "LISTA JARDINES DEL POLO #3.pdf (Drive > Jardines del Polo)"
+    }
+   }
+  },
+  {
+   "id": "casa-10",
+   "unidad": "10",
+   "etiqueta": "Casa 10",
+   "tipo": "casa",
+   "nivel": null,
+   "piso": null,
+   "tipologia": "Tipo A · 4 dormitorios",
+   "dormitorios": 4,
+   "banos": null,
+   "superficies": {
+    "parcela": 231.0,
+    "construidos": 208.0,
+    "desglose": [
+     [
+      "Planta baja",
+      84
+     ],
+     [
+      "Planta alta",
+      98
+     ],
+     [
+      "Lavadero",
+      5
+     ],
+     [
+      "Galería",
+      21
+     ]
+    ]
+   },
+   "precio": 698800.0,
+   "moneda": "USD",
+   "estado": "disponible",
+   "plano": "masterplan",
+   "zona": "10",
+   "observaciones": [
+    "Metraje a cotejar con Ing. Agrimensor (según el brochure del desarrollo)."
+   ],
+   "fuentes": {
+    "estadoYPrecio": "LISTAS PIRES BENLIAN.xlsx, hoja \"JARDINES DEL POLO\" (2026-10-23)",
+    "superficies": "LISTAS PIRES BENLIAN.xlsx, hoja \"JARDINES DEL POLO\" (2026-10-23) (parcela y construidos) · JDP-brochure-21nov.pdf (Drive > Jardines del Polo) (desglose por tipo)",
+    "plano": "JDP-brochure-21nov.pdf (Drive > Jardines del Polo) — masterplan, página 5"
+   },
+   "historico": {
+    "listaOficialPdf": {
+     "estado": "disponible",
+     "precio": 698800.0,
+     "documento": "LISTA JARDINES DEL POLO #3.pdf (Drive > Jardines del Polo)"
+    }
+   }
+  },
+  {
+   "id": "casa-11",
+   "unidad": "11",
+   "etiqueta": "Casa 11",
+   "tipo": "casa",
+   "nivel": null,
+   "piso": null,
+   "tipologia": "Tipo B · 3 dormitorios",
+   "dormitorios": 3,
+   "banos": null,
+   "superficies": {
+    "parcela": 348.0,
+    "construidos": 168.0,
+    "desglose": [
+     [
+      "Planta baja",
+      62
+     ],
+     [
+      "Planta alta",
+      79
+     ],
+     [
+      "Lavadero",
+      5
+     ],
+     [
+      "Galería",
+      22
+     ]
+    ]
+   },
+   "precio": 686450.0,
+   "moneda": "USD",
+   "estado": "disponible",
+   "plano": "masterplan",
+   "zona": "11",
+   "observaciones": [
+    "Metraje a cotejar con Ing. Agrimensor (según el brochure del desarrollo)."
+   ],
+   "fuentes": {
+    "estadoYPrecio": "LISTAS PIRES BENLIAN.xlsx, hoja \"JARDINES DEL POLO\" (2026-10-23)",
+    "superficies": "LISTAS PIRES BENLIAN.xlsx, hoja \"JARDINES DEL POLO\" (2026-10-23) (parcela y construidos) · JDP-brochure-21nov.pdf (Drive > Jardines del Polo) (desglose por tipo)",
+    "plano": "JDP-brochure-21nov.pdf (Drive > Jardines del Polo) — masterplan, página 5"
+   },
+   "historico": {
+    "listaOficialPdf": {
+     "estado": "disponible",
+     "precio": 686450.0,
+     "documento": "LISTA JARDINES DEL POLO #3.pdf (Drive > Jardines del Polo)"
+    }
+   }
+  },
+  {
+   "id": "casa-12",
+   "unidad": "12",
+   "etiqueta": "Casa 12",
+   "tipo": "casa",
+   "nivel": null,
+   "piso": null,
+   "tipologia": "Tipo B · 3 dormitorios",
+   "dormitorios": 3,
+   "banos": null,
+   "superficies": {
+    "parcela": 203.0,
+    "construidos": 168.0,
+    "desglose": [
+     [
+      "Planta baja",
+      62
+     ],
+     [
+      "Planta alta",
+      79
+     ],
+     [
+      "Lavadero",
+      5
+     ],
+     [
+      "Galería",
+      22
+     ]
+    ]
+   },
+   "precio": 577000.0,
+   "moneda": "USD",
+   "estado": "disponible",
+   "plano": "masterplan",
+   "zona": "12",
+   "observaciones": [
+    "Metraje a cotejar con Ing. Agrimensor (según el brochure del desarrollo)."
+   ],
+   "fuentes": {
+    "estadoYPrecio": "LISTAS PIRES BENLIAN.xlsx, hoja \"JARDINES DEL POLO\" (2026-10-23)",
+    "superficies": "LISTAS PIRES BENLIAN.xlsx, hoja \"JARDINES DEL POLO\" (2026-10-23) (parcela y construidos) · JDP-brochure-21nov.pdf (Drive > Jardines del Polo) (desglose por tipo)",
+    "plano": "JDP-brochure-21nov.pdf (Drive > Jardines del Polo) — masterplan, página 5"
+   },
+   "historico": {
+    "listaOficialPdf": {
+     "estado": "disponible",
+     "precio": 577000.0,
+     "documento": "LISTA JARDINES DEL POLO #3.pdf (Drive > Jardines del Polo)"
+    }
+   }
+  },
+  {
+   "id": "casa-13",
+   "unidad": "13",
+   "etiqueta": "Casa 13",
+   "tipo": "casa",
+   "nivel": null,
+   "piso": null,
+   "tipologia": "Tipo B · 3 dormitorios",
+   "dormitorios": 3,
+   "banos": null,
+   "superficies": {
+    "parcela": 352.0,
+    "construidos": 168.0,
+    "desglose": [
+     [
+      "Planta baja",
+      62
+     ],
+     [
+      "Planta alta",
+      79
+     ],
+     [
+      "Lavadero",
+      5
+     ],
+     [
+      "Galería",
+      22
+     ]
+    ]
+   },
+   "precio": 689470.0,
+   "moneda": "USD",
+   "estado": "disponible",
+   "plano": "masterplan",
+   "zona": "13",
+   "observaciones": [
+    "Metraje a cotejar con Ing. Agrimensor (según el brochure del desarrollo)."
+   ],
+   "fuentes": {
+    "estadoYPrecio": "LISTAS PIRES BENLIAN.xlsx, hoja \"JARDINES DEL POLO\" (2026-10-23)",
+    "superficies": "LISTAS PIRES BENLIAN.xlsx, hoja \"JARDINES DEL POLO\" (2026-10-23) (parcela y construidos) · JDP-brochure-21nov.pdf (Drive > Jardines del Polo) (desglose por tipo)",
+    "plano": "JDP-brochure-21nov.pdf (Drive > Jardines del Polo) — masterplan, página 5"
+   },
+   "historico": {
+    "listaOficialPdf": {
+     "estado": "disponible",
+     "precio": 689470.0,
+     "documento": "LISTA JARDINES DEL POLO #3.pdf (Drive > Jardines del Polo)"
+    }
+   }
+  },
+  {
+   "id": "casa-14",
+   "unidad": "14",
+   "etiqueta": "Casa 14",
+   "tipo": "casa",
+   "nivel": null,
+   "piso": null,
+   "tipologia": "Tipo B · 3 dormitorios",
+   "dormitorios": 3,
+   "banos": null,
+   "superficies": {
+    "parcela": 217.0,
+    "construidos": 168.0,
+    "desglose": [
+     [
+      "Planta baja",
+      62
+     ],
+     [
+      "Planta alta",
+      79
+     ],
+     [
+      "Lavadero",
+      5
+     ],
+     [
+      "Galería",
+      22
+     ]
+    ]
+   },
+   "precio": null,
+   "moneda": "USD",
+   "estado": "vendido",
+   "plano": "masterplan",
+   "zona": "14",
+   "observaciones": [
+    "Metraje a cotejar con Ing. Agrimensor (según el brochure del desarrollo)."
+   ],
+   "fuentes": {
+    "estadoYPrecio": "LISTAS PIRES BENLIAN.xlsx, hoja \"JARDINES DEL POLO\" (2026-10-23)",
+    "superficies": "LISTAS PIRES BENLIAN.xlsx, hoja \"JARDINES DEL POLO\" (2026-10-23) (parcela y construidos) · JDP-brochure-21nov.pdf (Drive > Jardines del Polo) (desglose por tipo)",
+    "plano": "JDP-brochure-21nov.pdf (Drive > Jardines del Polo) — masterplan, página 5"
+   },
+   "historico": {
+    "listaOficialPdf": {
+     "estado": "vendido",
+     "precio": null,
+     "documento": "LISTA JARDINES DEL POLO #3.pdf (Drive > Jardines del Polo)"
+    }
+   }
+  },
+  {
+   "id": "casa-15",
+   "unidad": "15",
+   "etiqueta": "Casa 15",
+   "tipo": "casa",
+   "nivel": null,
+   "piso": null,
+   "tipologia": "Tipo A · 4 dormitorios",
+   "dormitorios": 4,
+   "banos": null,
+   "superficies": {
+    "parcela": 293.0,
+    "construidos": 208.0,
+    "desglose": [
+     [
+      "Planta baja",
+      84
+     ],
+     [
+      "Planta alta",
+      98
+     ],
+     [
+      "Lavadero",
+      5
+     ],
+     [
+      "Galería",
+      21
+     ]
+    ]
+   },
+   "precio": 745670.0,
+   "moneda": "USD",
+   "estado": "disponible",
+   "plano": "masterplan",
+   "zona": "15",
+   "observaciones": [
+    "Metraje a cotejar con Ing. Agrimensor (según el brochure del desarrollo)."
+   ],
+   "fuentes": {
+    "estadoYPrecio": "LISTAS PIRES BENLIAN.xlsx, hoja \"JARDINES DEL POLO\" (2026-10-23)",
+    "superficies": "LISTAS PIRES BENLIAN.xlsx, hoja \"JARDINES DEL POLO\" (2026-10-23) (parcela y construidos) · JDP-brochure-21nov.pdf (Drive > Jardines del Polo) (desglose por tipo)",
+    "plano": "JDP-brochure-21nov.pdf (Drive > Jardines del Polo) — masterplan, página 5"
+   },
+   "historico": {
+    "listaOficialPdf": {
+     "estado": "disponible",
+     "precio": 745670.0,
+     "documento": "LISTA JARDINES DEL POLO #3.pdf (Drive > Jardines del Polo)"
+    }
+   }
+  },
+  {
+   "id": "casa-16",
+   "unidad": "16",
+   "etiqueta": "Casa 16",
+   "tipo": "casa",
+   "nivel": null,
+   "piso": null,
+   "tipologia": "Tipo A · 4 dormitorios",
+   "dormitorios": 4,
+   "banos": null,
+   "superficies": {
+    "parcela": 354.0,
+    "construidos": 208.0,
+    "desglose": [
+     [
+      "Planta baja",
+      84
+     ],
+     [
+      "Planta alta",
+      98
+     ],
+     [
+      "Lavadero",
+      5
+     ],
+     [
+      "Galería",
+      21
+     ]
+    ]
+   },
+   "precio": 791780.0,
+   "moneda": "USD",
+   "estado": "disponible",
+   "plano": "masterplan",
+   "zona": "16",
+   "observaciones": [
+    "Metraje a cotejar con Ing. Agrimensor (según el brochure del desarrollo)."
+   ],
+   "fuentes": {
+    "estadoYPrecio": "LISTAS PIRES BENLIAN.xlsx, hoja \"JARDINES DEL POLO\" (2026-10-23)",
+    "superficies": "LISTAS PIRES BENLIAN.xlsx, hoja \"JARDINES DEL POLO\" (2026-10-23) (parcela y construidos) · JDP-brochure-21nov.pdf (Drive > Jardines del Polo) (desglose por tipo)",
+    "plano": "JDP-brochure-21nov.pdf (Drive > Jardines del Polo) — masterplan, página 5"
+   },
+   "historico": {
+    "listaOficialPdf": {
+     "estado": "disponible",
+     "precio": 791780.0,
+     "documento": "LISTA JARDINES DEL POLO #3.pdf (Drive > Jardines del Polo)"
+    }
+   }
+  },
+  {
+   "id": "casa-17",
+   "unidad": "17",
+   "etiqueta": "Casa 17",
+   "tipo": "casa",
+   "nivel": null,
+   "piso": null,
+   "tipologia": "Tipo C · 3 dormitorios",
+   "dormitorios": 3,
+   "banos": null,
+   "superficies": {
+    "parcela": 250.0,
+    "construidos": 166.0,
+    "desglose": [
+     [
+      "Planta baja",
+      66
+     ],
+     [
+      "Planta alta",
+      80
+     ],
+     [
+      "Lavadero",
+      4
+     ],
+     [
+      "Galería",
+      16
+     ]
+    ]
+   },
+   "precio": null,
+   "moneda": "USD",
+   "estado": "vendido",
+   "plano": "masterplan",
+   "zona": "17",
+   "observaciones": [
+    "Metraje a cotejar con Ing. Agrimensor (según el brochure del desarrollo)."
+   ],
+   "fuentes": {
+    "estadoYPrecio": "LISTAS PIRES BENLIAN.xlsx, hoja \"JARDINES DEL POLO\" (2026-10-23)",
+    "superficies": "LISTAS PIRES BENLIAN.xlsx, hoja \"JARDINES DEL POLO\" (2026-10-23) (parcela y construidos) · JDP-brochure-21nov.pdf (Drive > Jardines del Polo) (desglose por tipo)",
+    "plano": "JDP-brochure-21nov.pdf (Drive > Jardines del Polo) — masterplan, página 5"
+   },
+   "historico": {
+    "listaOficialPdf": {
+     "estado": "vendido",
+     "precio": null,
+     "documento": "LISTA JARDINES DEL POLO #3.pdf (Drive > Jardines del Polo)"
+    }
+   }
+  },
+  {
+   "id": "casa-18",
+   "unidad": "18",
+   "etiqueta": "Casa 18",
+   "tipo": "casa",
+   "nivel": null,
+   "piso": null,
+   "tipologia": "Tipo C · 3 dormitorios",
+   "dormitorios": 3,
+   "banos": null,
+   "superficies": {
+    "parcela": 225.0,
+    "construidos": 166.0,
+    "desglose": [
+     [
+      "Planta baja",
+      66
+     ],
+     [
+      "Planta alta",
+      80
+     ],
+     [
+      "Lavadero",
+      4
+     ],
+     [
+      "Galería",
+      16
+     ]
+    ]
+   },
+   "precio": 588420.0,
+   "moneda": "USD",
+   "estado": "disponible",
+   "plano": "masterplan",
+   "zona": "18",
+   "observaciones": [
+    "Metraje a cotejar con Ing. Agrimensor (según el brochure del desarrollo)."
+   ],
+   "fuentes": {
+    "estadoYPrecio": "LISTAS PIRES BENLIAN.xlsx, hoja \"JARDINES DEL POLO\" (2026-10-23)",
+    "superficies": "LISTAS PIRES BENLIAN.xlsx, hoja \"JARDINES DEL POLO\" (2026-10-23) (parcela y construidos) · JDP-brochure-21nov.pdf (Drive > Jardines del Polo) (desglose por tipo)",
+    "plano": "JDP-brochure-21nov.pdf (Drive > Jardines del Polo) — masterplan, página 5"
+   },
+   "historico": {
+    "listaOficialPdf": {
+     "estado": "disponible",
+     "precio": 588420.0,
+     "documento": "LISTA JARDINES DEL POLO #3.pdf (Drive > Jardines del Polo)"
+    }
+   }
+  }
+ ],
+ "discrepancias": []
+}
